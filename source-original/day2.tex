@@ -1,0 +1,643 @@
+% ============================================================
+\section{Day 2}
+% ============================================================
+
+\subsection{Readings}
+
+\begin{itemize}
+    \item Bernhard and Michael Grzimek, \textit{Serengeti Shall Not Die}.
+\end{itemize}
+
+
+
+% ============================================================
+\subsection{Theory of the mean}
+% ============================================================
+
+A useful way of constructing a dynamical model is to keep track of the mean value of one or more variables of interest.
+
+The basic protocol is:
+
+\begin{enumerate}
+    \item Identify the variables of interest.
+    \item Enumerate all the ways in which those variables can increase or decrease, and assign rates to those processes.
+    \item Write an update rule describing the change during a small time interval $\Delta t$.
+    \item Take the continuum limit and integrate the resulting differential equation to obtain the time evolution.
+\end{enumerate}
+
+
+% ------------------------------------------------------------
+\subsubsection{Example: ligand-receptor binding}
+% ------------------------------------------------------------
+
+Consider a ligand $L$ that can bind reversibly to a receptor $R$ to form a ligand--receptor complex $LR$.
+
+The variables of interest are therefore the concentrations
+
+\[
+    [R], \qquad [L], \qquad [LR].
+\]
+
+Here $[R]$ denotes the concentration of free receptors, $[L]$ the concentration of free ligands, and $[LR]$ the concentration of bound ligand--receptor complexes.
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Step 1: identify the variables}
+% ------------------------------------------------------------
+\\
+A schematic representation of the three states is
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[
+        ligand/.style={circle, draw, minimum size=0.7cm, inner sep=0pt},
+        receptor/.style={rounded corners=2pt, draw, minimum width=1.0cm, minimum height=0.7cm},
+        reaction/.style={Latex-Latex, thick}
+    ]
+        \node[receptor] (R) at (0,0) {$R$};
+        \node at (1.0,0) {$+$};
+        \node[ligand] (L) at (2.0,0) {$L$};
+
+        \draw[reaction] (2.8,0) -- (5.2,0);
+        \node at (4.0,0.28) {$k_{\mathrm{on}}$};
+        \node at (4.0,-0.28) {$k_{\mathrm{off}}$};
+
+        \node[receptor] (Rc) at (6.2,0) {$R$};
+        \node[ligand] (Lc) at (6.2,0.68) {$L$};
+        \node at (7.1,0) {$LR$};
+    \end{tikzpicture}
+    \caption{Reversible binding of a ligand $L$ to a receptor $R$ to form the complex $LR$.
+    The same ligand and receptor symbols are used in the unbound and bound states.}
+\end{figure}
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Step 2: enumerate the processes and their rates}
+% ------------------------------------------------------------
+\\
+The reaction is
+\[
+    R + L \xrightleftharpoons[k_{\mathrm{off}}]{k_{\mathrm{on}}} LR.
+\]
+The forward reaction is ligand binding.
+According to the law of mass action, its rate is proportional to both the free ligand concentration and the free receptor concentration,
+\[
+    \text{binding rate} = k_{\mathrm{on}}[L][R].
+\]
+
+The reverse reaction is ligand unbinding.
+Its rate is proportional to the concentration of bound complexes,
+\[
+    \text{unbinding rate} = k_{\mathrm{off}}[LR].
+\]
+The association rate constant $k_{\mathrm{on}}$ has units of concentration$^{-1}$ time$^{-1}$.
+The dissociation rate constant $k_{\mathrm{off}}$ has units of time$^{-1}$.
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Step 3: write the update rule}
+% ------------------------------------------------------------
+\\
+During a short time interval $\Delta t$, the concentration of bound complexes changes according to
+\[
+    [LR](t+\Delta t) = [LR](t) + k_{\mathrm{on}}\Delta t[L][R] - k_{\mathrm{off}}\Delta t[LR].
+\]
+The first additional term represents newly formed complexes.
+The second represents complexes lost through dissociation.
+Subtracting $[LR](t)$ from both sides and dividing by $\Delta t$ gives
+\[
+    \frac{[LR](t+\Delta t)-[LR](t)}{\Delta t} = k_{\mathrm{on}}[L][R] - k_{\mathrm{off}}[LR].
+\]
+Taking the limit $\Delta t\rightarrow0$ gives
+\[
+    \boxed{\frac{\dd[LR]}{\dd t} = k_{\mathrm{on}}[L][R] - k_{\mathrm{off}}[LR].}
+\]
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Steady state}
+% ------------------------------------------------------------
+\\
+At steady state, the mean concentration of bound complexes is no longer changing,
+\[
+    \frac{\dd[LR]}{\dd t} = 0.
+\]
+Therefore,
+\[
+    k_{\mathrm{on}}[L][R] - k_{\mathrm{off}}[LR] = 0.
+\]
+Hence
+\[
+    k_{\mathrm{on}}[L][R] = k_{\mathrm{off}}[LR].
+\]
+Rearranging,
+\[
+    \frac{[L][R]}{[LR]} = \frac{k_{\mathrm{off}}}{k_{\mathrm{on}}}.
+\]
+We define the dissociation constant
+\[
+    \boxed{K_d = \frac{k_{\mathrm{off}}}{k_{\mathrm{on}}}.}
+\]
+Therefore,
+\[
+    K_d = \frac{[L][R]}{[LR]}.
+\]
+Equivalently,
+\[
+    \frac{[LR]}{[R]} = \frac{[L]}{K_d}.
+\]
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Probability that a receptor is bound}
+% ------------------------------------------------------------
+\\
+The total receptor concentration is the sum of free and bound receptors,
+\[
+    [R]_{\mathrm{tot}} = [R] + [LR].
+\]
+The fraction of receptors that are bound is therefore
+\[
+    P_{\mathrm{bound}} = \frac{[LR]}{[R]+[LR]}.
+\]
+Using
+\[
+    \frac{[LR]}{[R]} = \frac{[L]}{K_d},
+\]
+we obtain
+\[
+    P_{\mathrm{bound}} = \frac{[L]/K_d}{1+[L]/K_d}.
+\]
+Thus
+\[
+    \boxed{P_{\mathrm{bound}}([L]) = \frac{[L]}{K_d+[L]}.}
+\]
+This expression has several useful limits.
+
+When there is no ligand,
+\[
+    [L]=0 \quad \Rightarrow \quad P_{\mathrm{bound}}=0.
+\]
+
+When the ligand concentration is very large compared with $K_d$,
+\[
+    [L]\gg K_d \quad \Rightarrow \quad P_{\mathrm{bound}}\rightarrow1.
+\]
+
+When
+\[
+    [L]=K_d,
+\]
+we have
+\[
+    P_{\mathrm{bound}} = \frac{1}{2}.
+\]
+Thus $K_d$ is the ligand concentration at which half of the receptors are occupied in this simple binding model.
+A smaller $K_d$ corresponds to stronger binding, since less ligand is required to reach half occupancy.
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Step 4: time evolution}
+% ------------------------------------------------------------
+\\
+To solve explicitly for the time evolution, suppose that the free ligand concentration $[L]$ remains approximately constant.
+The total receptor concentration is conserved,
+\[
+    [R]_{\mathrm{tot}} = [R]+[LR].
+\]
+Therefore,
+\[
+    [R] = [R]_{\mathrm{tot}}-[LR].
+\]
+Substituting this into the dynamical equation gives
+\[
+    \frac{\dd[LR]}{\dd t} = k_{\mathrm{on}}[L]\left([R]_{\mathrm{tot}}-[LR]\right)-k_{\mathrm{off}}[LR].
+\]
+Collecting terms gives
+\[
+    \frac{\dd[LR]}{\dd t} = k_{\mathrm{on}}[L][R]_{\mathrm{tot}}-\left(k_{\mathrm{on}}[L]+k_{\mathrm{off}}\right)[LR].
+\]
+The equilibrium concentration is
+\[
+    [LR]_{\mathrm{eq}} = [R]_{\mathrm{tot}}\frac{[L]}{K_d+[L]}.
+\]
+The full time-dependent solution is
+\[
+    [LR](t) = [LR]_{\mathrm{eq}} + \left([LR](0)-[LR]_{\mathrm{eq}}\right)e^{-\left(k_{\mathrm{on}}[L]+k_{\mathrm{off}}\right)t}.
+\]
+The system therefore relaxes exponentially toward equilibrium with characteristic timescale
+\[
+    \tau = \frac{1}{k_{\mathrm{on}}[L]+k_{\mathrm{off}}}.
+\]
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Assumptions of the simple ligand--receptor model}
+% ------------------------------------------------------------
+\\
+The model assumes that:
+\begin{itemize}
+    \item the system is well mixed, so spatial variation in ligand and receptor concentrations can be ignored;
+    \item each receptor has a single independent ligand-binding site;
+    \item binding follows the law of mass action;
+    \item the rate constants $k_{\mathrm{on}}$ and $k_{\mathrm{off}}$ are constant;
+    \item receptors and ligands are chemically identical within their respective populations;
+    \item there is no cooperativity between receptors;
+    \item there are no additional receptor states or competing ligands;
+    \item for the explicit time-dependent solution above, the free ligand concentration $[L]$ is treated as constant.
+\end{itemize}
+
+
+% ============================================================
+\subsection{Phytoplankton uptake and resource competition}
+% ============================================================
+
+A biological example of constructing dynamical rules from rates is the uptake of limiting resources by phytoplankton.
+David Tilman studied competition between freshwater phytoplankton species under different supplies of limiting resources.
+The experiments compared predictions from quantitative resource-competition models with the observed abundances of competing algal species.
+
+\begin{quote}
+\href{https://hahana.soest.hawaii.edu/cmoreserver/summercourse/2015/documents/Follows_05-30/Tilman-1977.pdf}{
+    D. Tilman (1977),
+    \textit{Resource Competition between Plankton Algae: An Experimental and Theoretical Approach},
+    Ecology \textbf{58}, 338--348.
+    }
+\end{quote}
+
+
+% ============================================================
+\subsection{Theory of the histogram}
+% ============================================================
+
+The theory of the mean follows only the average value of a variable.
+In many biological systems, however, the full distribution contains information that the mean alone cannot capture.
+Instead of asking only how the mean changes with time, we can ask how probability moves between different possible values or states.
+
+% ------------------------------------------------------------
+\subsubsection*{Example 1: number of mRNA molecules in a fly embryo}
+% ------------------------------------------------------------
+
+Suppose we want to describe the spatial distribution of mRNA molecules along a fly embryo.
+We can discretize the embryo into small spatial boxes.
+Each box then contains some number of mRNA molecules.
+The collection of counts across boxes forms a spatial distribution rather than a single mean value.
+
+
+% ------------------------------------------------------------
+\subsubsection*{Example 2: age distributions}
+% ------------------------------------------------------------
+
+Age is intrinsically continuous, but it can be discretized into bins such as years.
+
+For example,
+
+\[
+    [0,1), \qquad [1,2), \qquad [2,3), \qquad \ldots
+\]
+
+We can then count how many individuals occupy each age bin.
+
+The resulting histogram is a discretized representation of the underlying age distribution.
+
+
+% ============================================================
+\subsubsection{Theory of the histogram protocol}
+% ============================================================
+
+A corresponding protocol for describing an entire probability distribution is:
+
+\begin{enumerate}
+    \item Consider the population of interest as a probability distribution over a set of possible states or bins.
+    \item Enumerate all the ways in which individuals or probability can move between those bins.
+    \item Write an update rule describing the flow of probability into and out of each bin during a time step $\Delta t$.
+    \item Given an initial distribution $p(m,t_0)$, solve for the distribution $p(m,t)$ at later times.
+\end{enumerate}
+
+Here $m$ labels the state or bin of interest.
+
+For example, $m$ could denote the number of mRNA molecules in a cell.
+
+Instead of following only the mean
+\[
+    \langle m\rangle,
+\]
+we now follow the full probability distribution
+\[
+    p(m,t).
+\]
+The normalization condition is
+\[
+    \sum_m p(m,t)=1.
+\]
+This shift from the dynamics of a mean to the dynamics of a distribution is important whenever fluctuations are themselves biologically relevant.
+
+% ------------------------------------------------------------
+\subsubsection{Example: the dynamics of an mRNA histogram}
+% ------------------------------------------------------------
+
+Consider a population of identical cells.
+Instead of describing only the mean number of mRNA molecules per cell, we describe the entire distribution of mRNA copy numbers.
+
+Let
+\[
+    p(m,t)
+\]
+denote the probability that a cell contains exactly $m$ mRNA molecules at time $t$.
+Equivalently, if we measure a large population of cells, $p(m,t)$ is the fraction of cells occupying the histogram bin corresponding to $m$ mRNAs.
+
+The distribution is normalized,
+\[
+    \sum_{m=0}^{\infty}p(m,t)=1.
+\]
+% % % 
+% % % 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Step 1: identify the states}
+% ------------------------------------------------------------
+
+The possible states are the discrete mRNA copy numbers
+\[
+    m=0,1,2,3,\ldots
+\]
+Each value of $m$ corresponds to one bin of the histogram.
+% % 
+% % 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Step 2: enumerate the ways of moving between bins}
+% ------------------------------------------------------------
+
+Assume that mRNA is produced at a constant rate $r$.
+
+A transcription event increases the copy number by one,
+
+\[
+    m \longrightarrow m+1.
+\]
+
+Assume that each individual mRNA molecule is degraded independently at rate $\gamma$.
+
+If there are $m$ molecules in the cell, the total degradation rate is therefore
+
+\[
+    \gamma m.
+\]
+
+A degradation event decreases the copy number by one,
+
+\[
+    m \longrightarrow m-1.
+\]
+
+The transitions between neighboring histogram bins are therefore
+
+\[
+    \cdots \rightleftharpoons m-1 \rightleftharpoons m \rightleftharpoons m+1 \rightleftharpoons \cdots
+\]
+
+with transcription moving probability to the right and degradation moving probability to the left.
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Step 3: write the probability flow for one bin}
+% ------------------------------------------------------------
+
+To determine how $p(m,t)$ changes, enumerate all the ways probability can flow into and out of the bin $m$ during a short time interval $\Delta t$.
+There are two ways to enter the state $m$.
+First, a cell containing $m-1$ molecules can produce one new mRNA.
+The corresponding probability flow is
+\[
+    r\Delta t\,p(m-1,t).
+\]
+Second, a cell containing $m+1$ molecules can lose one mRNA through degradation.
+Since there are $m+1$ molecules available to degrade, the total degradation rate in this state is $\gamma(m+1)$.
+The corresponding probability flow is
+\[
+    \gamma(m+1)\Delta t\,p(m+1,t).
+\]
+
+There are also two ways to leave the state $m$.
+A transcription event moves the system from $m$ to $m+1$, giving an outgoing contribution
+\[
+    r\Delta t\,p(m,t).
+\]
+A degradation event moves the system from $m$ to $m-1$, giving an outgoing contribution
+\[
+    \gamma m\Delta t\,p(m,t).
+\]
+Putting all of these contributions together gives the update rule
+\[
+    p(m,t+\Delta t)
+    \\
+    = p(m,t)
+    \\
+    + r\Delta t\,p(m-1,t)
+    \\
+    + \gamma(m+1)\Delta t\,p(m+1,t)
+    \\
+    - r\Delta t\,p(m,t)
+    \\
+    - \gamma m\Delta t\,p(m,t).
+\]
+The structure is
+\[
+    \text{new probability}
+    \\
+    = \text{old probability}
+    \\
+    + \text{probability flowing in}
+    \\
+    - \text{probability flowing out}.
+\]
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Step 4: take the continuous-time limit}
+% ------------------------------------------------------------
+
+Subtracting $p(m,t)$ from both sides and dividing by $\Delta t$ gives
+
+\[
+    \frac{p(m,t+\Delta t)-p(m,t)}{\Delta t}
+    \\
+    = rp(m-1,t)
+    \\
+    + \gamma(m+1)p(m+1,t)
+    \\
+    - rp(m,t)
+    \\
+    - \gamma m p(m,t).
+\]
+
+Taking the limit $\Delta t\rightarrow0$ gives
+
+\[
+    \boxed{
+    \frac{\partial p(m,t)}{\partial t}
+    = rp(m-1,t)
+    + \gamma(m+1)p(m+1,t)
+    - rp(m,t)
+    - \gamma m p(m,t)
+    }.
+\]
+
+This is the chemical master equation for constitutive mRNA production and degradation.
+It describes the dynamics of the entire histogram rather than only the mean mRNA number.
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Reading the master equation as probability flow}
+% ------------------------------------------------------------
+
+Each term has a direct interpretation:
+\begin{enumerate}
+    \item $rp(m-1,t)$ : probability flowing into bin $m$ from bin $m-1$ through transcription.
+    \item $\gamma(m+1)p(m+1,t)$ : probability flowing into bin $m$ from bin $m+1$ through degradation.
+    \item $-rp(m,t)$ : probability leaving bin $m$ through transcription.
+    \item $-\gamma m p(m,t)$ : probability leaving bin $m$ through degradation.
+\end{enumerate}
+Therefore the equation is simply a bookkeeping equation for probability.
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Boundary at zero mRNAs}
+% ------------------------------------------------------------
+
+The copy number cannot become negative.
+For $m=0$, there is therefore no probability flow into the state from $m=-1$.
+The equation for the zero-mRNA bin is
+\[
+    \frac{\partial p(0,t)}{\partial t}
+    = \gamma p(1,t) - rp(0,t).
+\]
+The first term represents cells entering the $m=0$ state when their last mRNA is degraded.
+The second term represents cells leaving the $m=0$ state when a new mRNA is produced.
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Steady-state histogram}
+% ------------------------------------------------------------
+
+At steady state, the probability of occupying each bin no longer changes with time,
+\[
+    \frac{\partial p(m,t)}{\partial t}=0.
+\]
+For this simple birth--death process, the steady-state distribution is a Poisson distribution,
+\[
+    \boxed{
+    p_{\mathrm{ss}}(m)
+    = \frac{\lambda^m e^{-\lambda}}{m!}
+    }.
+\]
+The parameter $\lambda$ is
+\[
+    \lambda=\frac{r}{\gamma}.
+\]
+Therefore,
+\[
+    \boxed{
+    p_{\mathrm{ss}}(m)
+    = \frac{1}{m!}
+    \left(\frac{r}{\gamma}\right)^m
+    e^{-r/\gamma}
+    }.
+\]
+The mean of this distribution is
+\[
+    \langle m\rangle_{\mathrm{ss}}=\frac{r}{\gamma}.
+\]
+Its variance is also
+\[
+    \operatorname{Var}(m)_{\mathrm{ss}}=\frac{r}{\gamma}.
+\]
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Connection to the theory of the mean}
+% ------------------------------------------------------------
+
+The histogram description contains the mean description as one of its consequences.
+The mean mRNA number is defined from the probability distribution as
+\[
+    \langle m(t)\rangle = \sum_{m=0}^{\infty}m\,p(m,t).
+\]
+Using the master equation, one finds
+\[
+    \boxed{
+    \frac{\dd\langle m\rangle}{\dd t}
+    = r-\gamma\langle m\rangle
+    }.
+\]
+This is exactly the deterministic equation obtained using the theory-of-the-mean protocol.
+At steady state,
+\[
+    \langle m\rangle_{\mathrm{ss}}=\frac{r}{\gamma}.
+\]
+
+The two approaches therefore answer different levels of the same question.
+The theory of the mean tells us how the average copy number evolves.
+The theory of the histogram tells us how the probability of every possible copy number evolves.
+The histogram description consequently contains information about fluctuations, variance, and the shape of the population distribution that is invisible if we follow only the mean.
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Assumptions}
+% ------------------------------------------------------------
+
+The simple mRNA birth-death model assumes that:
+
+\begin{itemize}
+    \item transcription occurs at a constant rate $r$ independent of the current mRNA number;
+    \item each mRNA molecule degrades independently at the same rate $\gamma$;
+    \item transcription changes the copy number by exactly $+1$;
+    \item degradation changes the copy number by exactly $-1$;
+    \item the system is Markovian, so transition probabilities depend only on the current state;
+    \item $\Delta t$ is sufficiently small that the probability of two or more reaction events during the same time interval is of order $\Delta t^2$ and can be neglected;
+    \item there is no transcriptional bursting, promoter switching, feedback, or other regulation;
+    \item cells are treated as identical apart from the stochastic differences generated by transcription and degradation.
+\end{itemize}
+
+
+% ============================================================
+\subsection{Biological turnover}
+% ============================================================
+
+Biological systems are continually renewed through the production, loss, and replacement of their components.
+
+Turnover can therefore be viewed using the same general framework: identify the states of interest, enumerate the processes that move material between those states, assign rates, and construct the corresponding dynamical equations.
+
+Reference on biological turnover:
+\url{https://www.sciencedirect.com/science/article/pii/S0092867424004604}
+
+Reference on red blood cell turnover:
+\url{https://www.sciencedirect.com/science/article/pii/S0021925817352018}

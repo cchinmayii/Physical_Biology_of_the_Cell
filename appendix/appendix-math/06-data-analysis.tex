@@ -1,0 +1,72 @@
+\subsection{Least squares, likelihood, and optimization}
+\label{math:least-squares}
+
+For observations $(x_i,y_i)$ and predictions $\hat y_i=f(x_i;\boldsymbol{\theta})$, the residual is $r_i=y_i-\hat y_i$.
+Ordinary least squares minimizes
+\[
+    E(\boldsymbol{\theta})=\sum_{i=1}^{N}r_i^2.
+\]
+
+\paragraph{Worked example}
+Fitting $y=ax+b$ to $(0,1)$, $(1,2)$, and $(2,2)$ gives the normal equations
+\[
+    5a+3b=6, \qquad 3a+3b=5,
+\]
+so $a=1/2$ and $b=7/6$.
+
+If errors are independent Gaussian variables with common variance $\sigma^2$, the likelihood is
+\[
+    \mathcal{L}\propto\exp\left[-\frac{1}{2\sigma^2}\sum_i r_i^2\right].
+\]
+Maximum likelihood is then equivalent to least squares.
+Unequal variances instead motivate weighted least squares, $E=\sum_i r_i^2/\sigma_i^2$.
+
+In matrix form, $\mathbf{y}=X\boldsymbol{\theta}+\boldsymbol{\epsilon}$ and
+\[
+    X^{\mathsf T}X\hat{\boldsymbol{\theta}}=X^{\mathsf T}\mathbf{y}.
+\]
+At the solution, the residual is orthogonal to every column of $X$.
+
+Residual structure should be inspected.
+A curved pattern, changing variance, or correlated residuals indicates a failed assumption.
+Within a nested family of models, adding parameters cannot increase the minimized in-sample squared error, but it may worsen prediction on new data.
+
+
+\subsection{Covariance, correlation, and principal component analysis}
+\label{math:pca}
+
+Covariance measures whether two variables tend to fluctuate together.
+It is positive when they tend to lie above or below their means at the same time, negative when one tends to be above its mean while the other is below, and near zero when there is no linear co-fluctuation.
+It is defined by
+\[
+    \operatorname{Cov}(X,Y)=\left\langle(X-\langle X\rangle)(Y-\langle Y\rangle)\right\rangle.
+\]
+Correlation rescales it to a dimensionless number:
+\[
+    \rho_{XY}=\frac{\operatorname{Cov}(X,Y)}{\sigma_X\sigma_Y}.
+\]
+Zero covariance excludes a linear association but not every nonlinear dependence.
+
+For centered vector data $\delta\mathbf{x}=\mathbf{x}-\langle\mathbf{x}\rangle$, the covariance matrix is
+\[
+    C=\left\langle\delta\mathbf{x}\,\delta\mathbf{x}^{\mathsf T}\right\rangle.
+\]
+The variance along a unit direction $\mathbf{v}$ is $\mathbf{v}^{\mathsf T}C\mathbf{v}$.
+The direction of greatest variance is the eigenvector with largest eigenvalue.
+The explained-variance fraction of component $i$ is
+\[
+    \frac{\lambda_i}{\sum_j\lambda_j}.
+\]
+
+\paragraph{Worked example}
+For centered data lying on $x_2=x_1$,
+\[
+    C=s^2\begin{pmatrix}1&1\\1&1\end{pmatrix}.
+\]
+The direction $(1,1)^{\mathsf T}/\sqrt{2}$ has eigenvalue $2s^2$ and contains all variation.
+The perpendicular direction has eigenvalue zero.
+
+PCA should normally use centered data.
+Standardization may prevent variables with large units from dominating, but it also erases physically meaningful scale differences.
+PCA finds directions of variance, not automatically causal variables or dynamical modes.
+

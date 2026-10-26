@@ -1,0 +1,594 @@
+\clearpage
+\section{Detailed derivations from the course}
+\label{app:derivations}
+% EDITORIAL ADDITION: navigation or conceptual bridge
+These longer calculations support the conceptual development in the main text.
+Their algebra, assumptions, and interpretations are retained from the day-by-day notes.
+% Source: day3.tex:133; unit d3.0.3
+\subsection{Discrete Fourier modes and the long-wavelength decay law}
+\label{deriv:discrete-modes}
+
+% ====================
+
+Consider one cosine mode,
+\[
+    P_n(x,t) = A_n\cos(q_nx),
+\]
+with
+\[
+    q_n = \frac{2\pi n}{L}.
+\]
+Substituting this into the random-walk update rule gives
+\begin{align*}
+    P_n(x,t+\Dt) &= A_n \cos(q_nx) + k\Dt A_n \cos \left( q_n(x-a) \right)
+    \nonumber\\
+    &\quad + k\Dt A_n \cos \left( q_n(x+a) \right) - 2k\Dt A_n \cos(q_nx).
+\end{align*}
+Using
+\[
+    \cos (\alpha + \beta) + \cos (\alpha - \beta) = 2 \cos \alpha \cos \beta,
+\]
+we obtain
+\begin{align*}
+    P_n(x,t+\Dt) &= A_n\cos(q_nx) + 2k\Dt A_n\cos(q_nx)\cos(q_na)
+    \nonumber\\
+    &\qquad - 2k\Dt A_n\cos(q_nx)
+    \\
+    &= A_n\cos(q_nx) \left[ 1+2k\Dt\left(\cos(q_na)-1\right) \right].
+\end{align*}
+Since
+\[
+    P_n(x,t) = A_n\cos(q_nx),
+\]
+we have
+\[
+    \boxed{ P_n(x,t+\Dt) = r_n P_n(x,t), }
+\]
+where
+\[
+    \boxed{ r_n = 1 - 2k\Dt \left[ 1-\cos(q_na) \right]. }
+\]
+The spatial shape $\cos(q_nx)$ has not changed. 
+Only its amplitude has been multiplied by the number $r_n$.
+
+Therefore,
+\[
+    \boxed{ \cos(q_nx) \text{ is an eigenfunction of the random-walk update operator.} }
+\]
+The corresponding eigenvalue for one time step is $r_n$.
+% 
+% 
+% ====================
+\medskip
+\\
+\textbf{Physical meaning of the Fourier modes}
+% ====================
+
+Each value of $n$ corresponds to a different spatial wavelength,
+\[
+    \lambda_n = \frac{2\pi}{q_n} = \frac{L}{n}.
+\]
+Small $n$ corresponds to long-wavelength, slowly varying structures. 
+Large $n$ corresponds to short-wavelength, rapidly varying structures. 
+Diffusion suppresses the short-wavelength modes more rapidly than the long-wavelength modes. 
+This is why an initially sharp distribution becomes smooth with time.
+% 
+% 
+% ====================
+\medskip
+\\
+\textbf{Small-angle approximation and the diffusion constant}
+% ====================
+
+For wavelengths much larger than the lattice spacing,
+\[
+    q_na \ll 1.
+\]
+Using the Taylor expansion
+\[
+    \cos\theta = 1 - \frac{\theta^2}{2} + \mathcal{O}(\theta^4),
+\]
+we obtain
+\[
+    \cos(q_na) \approx 1 - \frac{q_n^2a^2}{2}.
+\]
+Therefore,
+\begin{align*}
+    r_n &= 1 - 2k\Dt \left[ 1-\cos(q_na) \right]
+    \\
+    &\approx 1 - 2k\Dt \left( \frac{q_n^2a^2}{2} \right)
+    \\
+    &= 1-ka^2q_n^2\Dt.
+\end{align*}
+Define the diffusion constant
+\[
+    \boxed{ D = ka^2. }
+\]
+Then
+\[
+    \boxed{ r_n \approx 1-Dq_n^2\Dt. }
+\]
+Hence
+\[
+    P_n(x,t + \Dt) = P_n(x,t) \left( 1 - Dq_n^2 \Dt \right).
+\]
+% 
+% 
+% ====================
+\medskip
+\\
+\textbf{Evolution over many time steps}
+% ====================
+
+After $N$ time steps,
+% 
+\[
+    P_n(x,t+N\Dt) = r_n^N P_n(x,t).
+\]
+% 
+In the long-wavelength approximation,
+% 
+\[
+    r_n^N = \left( 1-Dq_n^2\Dt \right)^N.
+\]
+% 
+Let the total elapsed time be
+% 
+\[
+    \tau = N\Dt.
+\]
+% 
+Therefore,
+% 
+\[
+    N = \frac{\tau}{\Dt},
+\]
+% 
+and
+% 
+\[
+    r_n^N = \left( 1-Dq_n^2\Dt \right)^{\tau/\Dt}.
+\]
+% 
+Using
+% 
+\[
+    \lim_{\epsilon\rightarrow0} (1+\alpha\epsilon)^{1/\epsilon} = e^\alpha,
+\]
+% 
+we obtain
+% 
+\[
+    \boxed{ r_n^N \longrightarrow e^{-Dq_n^2\tau}. }
+\]
+% 
+Thus a Fourier mode evolves as
+% 
+\[
+    \boxed{ P_n(x,t) = A_n e^{-Dq_n^2t} \cos(q_nx). }
+\]
+% 
+The relaxation time of mode $n$ is therefore
+% 
+\[
+    \tau_n = \frac{1}{Dq_n^2}.
+\]
+% 
+Since $q_n$ increases with $n$, high-frequency modes decay much faster than low-frequency modes.
+
+
+% ====================
+
+% Source: day3.tex:691; unit d3.6.4
+\subsection{The continuum limit: symmetry, Taylor expansion, and assumptions}
+\label{deriv:continuum}
+
+% ------------------------------------------------------------
+
+Start from the discrete random-walk update rule,
+
+\[
+    P(x,t+\Delta t) = P(x,t) + k\Delta t\,P(x-a,t) + k\Delta t\,P(x+a,t) - 2k\Delta t\,P(x,t).
+\]
+
+Equivalently,
+
+\[
+    P(x,t+\Delta t) = P(x,t) + k\Delta t\left[P(x-a,t)+P(x+a,t)-2P(x,t)\right].
+\]
+Here $k$ is the hopping rate in each direction and $a$ is the lattice spacing.
+
+We now assume that $P(x,t)$ varies smoothly over distances comparable to $a$.
+This allows us to Taylor-expand the shifted probability distributions around $x$.
+For the right-shifted position,
+% % 
+\[
+    P(x+a,t) = P(x,t) + a\frac{\partial P}{\partial x} + \frac{a^2}{2}\frac{\partial^2P}{\partial x^2} + \frac{a^3}{3!}\frac{\partial^3P}{\partial x^3} + \cdots.
+\]
+% % 
+For the left-shifted position,
+% % 
+\[
+    P(x-a,t) = P(x,t) - a\frac{\partial P}{\partial x} + \frac{a^2}{2}\frac{\partial^2P}{\partial x^2} - \frac{a^3}{3!}\frac{\partial^3P}{\partial x^3} + \cdots.
+\]
+% 
+Adding the two expansions causes all odd-order derivatives to cancel,
+% 
+\[
+    P(x+a,t)+P(x-a,t) = 2P(x,t) + a^2\frac{\partial^2P}{\partial x^2} + \mathcal{O}(a^4).
+\]
+% 
+Therefore,
+% 
+\[
+    P(x-a,t)+P(x+a,t)-2P(x,t) = a^2\frac{\partial^2P}{\partial x^2} + \mathcal{O}(a^4).
+\]
+% 
+Substituting this result into the update rule gives
+% 
+\[
+    P(x,t+\Delta t) = P(x,t) + k\Delta t\,a^2\frac{\partial^2P}{\partial x^2} + \mathcal{O}(a^4).
+\]
+% 
+Now Taylor-expand the left-hand side in time,
+% 
+\[
+    P(x,t+\Delta t) = P(x,t) + \Delta t\frac{\partial P}{\partial t} + \mathcal{O}(\Delta t^2).
+\]
+% 
+Substituting this gives
+% 
+\[
+    P(x,t) + \Delta t\frac{\partial P}{\partial t} = P(x,t) + k\Delta t\,a^2\frac{\partial^2P}{\partial x^2}.
+\]
+% 
+Canceling $P(x,t)$ from both sides gives
+% 
+\[
+    \Delta t\frac{\partial P}{\partial t} = k\Delta t\,a^2\frac{\partial^2P}{\partial x^2}.
+\]
+% 
+Canceling $\Delta t$ gives
+% 
+\[
+    \frac{\partial P}{\partial t} = ka^2\frac{\partial^2P}{\partial x^2}.
+\]
+% 
+Defining
+% 
+\[
+    \boxed{D=ka^2,}
+\]
+% 
+we recover
+% 
+\[
+    \boxed{\frac{\partial P}{\partial t} = D\frac{\partial^2P}{\partial x^2}.}
+\]
+% 
+Thus the continuum diffusion equation is the long-wavelength, smooth-space limit of the discrete random walk.
+% 
+% 
+% ------------------------------------------------------------
+\medskip
+\\
+\textbf{Why the first derivative disappears}
+% ------------------------------------------------------------
+
+The cancellation of the first spatial derivative is a consequence of the symmetry of the random walk.
+The walker moves left and right with the same rate.
+The term proportional to $+\partial P/\partial x$ from one direction therefore cancels the term proportional to $-\partial P/\partial x$ from the other.
+This leaves the second derivative as the leading spatial contribution,
+
+\[
+    \frac{\partial^2P}{\partial x^2}.
+\]
+
+If the walker instead had a systematic preference for one direction, the first derivatives would not cancel completely.
+The continuum equation would then contain a drift term in addition to diffusion.
+% 
+% 
+The continuum-limit derivation assumes that:
+\begin{itemize}
+    \item the walk is unbiased, so left and right hopping rates are equal;
+    \item the hopping rate $k$ is independent of position and time;
+    \item only nearest-neighbor jumps of length $a$ occur;
+    \item the process is Markovian, so the next transition depends only on the current state;
+    \item $P(x,t)$ varies smoothly on the length scale $a$, allowing the spatial Taylor expansion;
+    \item $\Delta t$ is sufficiently small that the temporal Taylor expansion is valid;
+    \item higher-order terms in $a$ and $\Delta t$ can be neglected;
+    \item the continuum limit is taken while the combination $ka^2=D$ remains finite.
+\end{itemize}
+
+
+% ------------------------------------------------------------
+
+% Source: day3.tex:403; unit d3.3
+\subsection{Solving diffusion by separation of variables}
+\label{deriv:separation}
+
+
+% ====================
+
+We now recover the Fourier modes directly from the PDE.
+
+Start from
+% 
+\[
+    \frac{\partial P}{\partial t} = D\frac{\partial^2P}{\partial x^2}.
+\]
+% 
+Assume a separable solution
+% 
+\[
+    P(x,t) = X(x) T(t).
+\]
+% 
+Substitution gives
+% 
+\[
+    X(x)\frac{\dd T}{\dd t} = DT(t)\frac{\dd^2X}{\dd x^2}.
+\]
+% 
+Divide by $DXT$:
+% 
+\[
+    \frac{1}{DT} \frac{\dd T}{\dd t} = \frac{1}{X} \frac{\dd^2X}{\dd x^2}.
+\]
+% 
+The left-hand side depends only on $t$, while the right-hand side depends only on $x$. 
+They can therefore be equal for every $x$ and $t$ only if both are equal to the same constant.
+For diffusive modes, write this constant as $-q^2$:
+% 
+\[
+    \frac{1}{DT} \frac{\dd T}{\dd t} = \frac{1}{X} \frac{\dd^2X}{\dd x^2} = -q^2.
+\]
+% 
+This gives two ordinary differential equations:
+% 
+\begin{align*}
+    \frac{\dd T}{\dd t} &= -Dq^2T,
+    \\
+    \frac{\dd^2X}{\dd x^2} &= -q^2X.
+\end{align*}
+% 
+Their solutions are
+% 
+\[
+    T(t) = Ce^{-Dq^2t},
+\]
+% 
+and
+% 
+\[
+    X(x) = A\cos(qx) + B\sin(qx).
+\]
+% 
+Therefore,
+% 
+\[
+    P(x,t) = \left[ A\cos(qx)+B\sin(qx) \right] e^{-Dq^2t}.
+\]
+
+Periodic boundary conditions require
+% 
+\[
+    q = q_n = \frac{2\pi n}{L}.
+\]
+% 
+Thus
+% 
+\[
+    \boxed{ P_n(x,t) = \left[ A_n\cos(q_nx) + B_n\sin(q_nx) \right] e^{-Dq_n^2t}. }
+\]
+% 
+% 
+% ====================
+\medskip
+\\
+\textbf{Why this solves a general initial condition}
+% ====================
+
+The usefulness of Fourier analysis is not merely that a cosine happens to solve the equation.
+A sufficiently well-behaved periodic initial probability distribution can be decomposed into Fourier modes,
+
+\[
+    P(x,0) = A_0 + \sum_{n=1}^{\infty} \left[ A_n\cos(q_nx) + B_n\sin(q_nx) \right].
+\]
+% 
+Because the diffusion equation is linear, each Fourier mode evolve independently:
+% 
+\[
+    P(x,t) = A_0 + \sum_{n=1}^{\infty} \left[ A_n\cos(q_nx) + B_n\sin(q_nx) \right] e^{-Dq_n^2t}.
+\]
+% 
+Thus the original PDE has effectively been converted into independent equations for the amplitudes of the Fourier modes.
+% 
+For each mode,
+% 
+\[
+    \frac{\dd A_n}{\dd t} = -Dq_n^2A_n,
+\]
+% 
+which is just an ordinary differential equation.
+% 
+This is the central simplification:
+% 
+\[
+    \boxed{ \text{PDE in real space} \quad\longrightarrow\quad \text{independent ODEs for Fourier modes}. }
+\]
+
+
+% ====================
+
+% Source: day5.tex:211; unit d5.2.2
+\subsection{Straight-line least squares: deriving the normal equations}
+\label{deriv:fit}
+
+% ------------------------------------------------------------
+
+At the minimum of the error function,
+
+\[
+    \frac{\partial E}{\partial a}=0
+\]
+% 
+and
+% 
+\[
+    \frac{\partial E}{\partial b}=0.
+\]
+% 
+Differentiating with respect to $a$ gives
+% 
+\[
+    \frac{\partial E}{\partial a}=\sum_{i=1}^{N}-2x_i\left[y_i-(ax_i+b)\right]=0.
+\]
+% 
+Therefore,
+% 
+\[
+    a\sum_{i=1}^{N}x_i^2+b\sum_{i=1}^{N}x_i=\sum_{i=1}^{N}x_iy_i.
+\]
+% 
+Differentiating with respect to $b$ gives
+% 
+\[
+    \frac{\partial E}{\partial b}=\sum_{i=1}^{N}-2\left[y_i-(ax_i+b)\right]=0.
+\]
+% 
+Therefore,
+% 
+\[
+    a\sum_{i=1}^{N}x_i+Nb=\sum_{i=1}^{N}y_i.
+\]
+% 
+The fitting problem has now become a system of two linear equations for the two unknown parameters $a$ and $b$.
+
+
+% ------------------------------------------------------------
+
+% Source: day5.tex:254; unit d5.2.3
+\subsubsection{Matrix representation and explicit fitting parameters}
+\label{deriv:fit-matrix}
+
+% ------------------------------------------------------------
+
+The two equations can be written as
+% 
+\[
+    \begin{pmatrix}
+        \sum_i x_i^2 & \sum_i x_i \\
+        \sum_i x_i & N
+    \end{pmatrix}
+    \begin{pmatrix}
+        a \\
+        b
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \sum_i x_i y_i \\
+        \sum_i y_i
+    \end{pmatrix}.
+\]
+% 
+A general system of linear equations has the form
+% 
+\[
+    A\mathbf{x}=\mathbf{c}.
+\]
+% 
+Formally, if $A$ is invertible,
+% 
+\[
+    \mathbf{x}=A^{-1}\mathbf{c}.
+\]
+% 
+For the straight-line fit, define
+% 
+\[
+    \Delta=N\sum_i x_i^2-\left(\sum_i x_i\right)^2.
+\]
+% 
+The slope is
+% 
+\[
+    \boxed{a=\frac{N\sum_i x_i y_i-\left(\sum_i x_i\right)\left(\sum_i y_i\right)}{\Delta}.}
+\]
+% 
+The intercept is
+% 
+\[
+    \boxed{b=\frac{\left(\sum_i x_i^2\right)\left(\sum_i y_i\right)-\left(\sum_i x_i\right)\left(\sum_i x_i y_i\right)}{\Delta}.}
+\]
+% 
+% 
+% ============================================================
+
+% Source: day5.tex:558; unit d5.5.1
+\subsection{Maximum entropy with normalization and a mean constraint}
+\label{deriv:maxent}
+
+% ------------------------------------------------------------
+
+Suppose that the states are labeled
+% 
+\[
+    i=1,\ldots,n.
+\]
+% 
+The probabilities must satisfy the normalization constraint
+% 
+\[
+    \sum_{i=1}^{n}p_i=1.
+\]
+% 
+As an example, suppose that the mean state is also constrained to be
+% 
+\[
+    \sum_{i=1}^{n}ip_i=4.5.
+\]
+% 
+We want to find the distribution $\{p_i\}$ that maximizes
+% 
+\[
+    S=-\sum_{i=1}^{n}p_i\ln p_i
+\]
+% 
+subject to these constraints.
+% 
+Introduce Lagrange multipliers $\alpha$ and $\beta$ and define
+% 
+\[
+    \mathcal{L}=-\sum_{i=1}^{n}p_i\ln p_i-\alpha\left(\sum_{i=1}^{n}p_i-1\right)-\beta\left(\sum_{i=1}^{n}ip_i-4.5\right).
+\]
+% 
+The stationary condition for every $p_i$ is
+% 
+\[
+    \frac{\partial\mathcal{L}}{\partial p_i}=0.
+\]
+% 
+This gives
+% 
+\[
+    -\ln p_i-1-\alpha-\beta i=0.
+\]
+% 
+Therefore,
+% 
+\[
+    p_i=e^{-1-\alpha-\beta i}.
+\]
+% 
+Equivalently,
+% 
+\[
+    p_i\propto e^{-\beta i}.
+\]
+% 
+The remaining constants are determined by the normalization and mean-value constraints.
+
+
+% ============================================================
+

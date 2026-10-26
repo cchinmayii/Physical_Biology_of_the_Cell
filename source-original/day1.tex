@@ -1,0 +1,215 @@
+
+% ====================
+\section{Day 1}
+% ====================
+
+\subsection{Readings}
+
+\begin{itemize}
+    \item Albert Einstein and Leopold Infeld,
+    \textit{The Evolution of Physics}.
+    \item Charles Darwin's notebooks.
+    \item Isaac Newton's ``Waste Book''.
+    \item John Gerhart and Marc Kirschner,
+    \textit{Cells, Embryos, and Evolution}.
+\end{itemize}
+
+
+% ====================
+\subsection{The scale of things}
+% ====================
+
+When a quantity is known only to lie somewhere between two scales,
+$x_{\min}$ and $x_{\max}$, a useful order-of-magnitude estimate is the geometric mean,
+
+\[
+    x_{\mathrm{est}} \sim \sqrt{x_{\min}x_{\max}}.
+\]
+
+This is especially natural when the uncertainty spans orders of magnitude.
+On a logarithmic scale,
+
+\[
+    \log x_{\mathrm{est}} = \frac{1}{2} \left( \log x_{\min} + \log x_{\max} \right),
+\]
+
+so the estimate lies halfway between the two bounds in log-space.
+
+Various biological examples with full breakdowns are available at \url{https://book.bionumbers.org}.
+
+
+% ====================
+\subsection{Gorter--Grendel experiment and the lipid bilayer}
+% ====================
+
+Gorter and Grendel used red blood cells to infer that cellular membranes
+consist of a lipid bilayer.
+
+The basic logic was:
+
+\begin{enumerate}
+    \item Take a known number of red blood cells.
+    \item Estimate the total surface area of those cells.
+    \item Extract the lipids from the cells.
+    \item Spread the extracted lipids into a monolayer.
+    \item Measure the area occupied by this lipid monolayer.
+\end{enumerate}
+
+The lipid monolayer occupied approximately twice the area of the cell
+surfaces. This suggests that the membrane contains two layers of lipid:
+
+\[
+    A_{\mathrm{lipid}} \approx 2 A_{\mathrm{cell}}.
+\]
+
+Hence the membrane is approximately a lipid bilayer.
+
+
+% ====================
+\subsection{The cell as a bag of proteins}
+% ====================
+
+A useful coarse-grained picture of the cell is as a system whose biomass
+is dominated by proteins and whose growth is therefore closely related
+to protein production.
+
+An order-of-magnitude estimate discussed in the lecture is
+
+\[
+    \frac{\text{number of protein molecules}}{\text{number of mRNA molecules}} \sim 10^3.
+\]
+
+Ribosomes synthesize proteins, including the ribosomal proteins required to construct new ribosomes. 
+Thus the translational machinery participates in its own production. 
+At a coarse-grained level this creates an \emph{autocatalytic} process: the machinery responsible for growth produces more of the machinery responsible for growth.
+
+This provides an intuitive route to exponential cellular growth.
+
+% ====================
+\subsubsection*{Simple growth law}
+% ====================
+
+Let $M(t)$ denote the cell mass at time $t$.
+
+Assume that the rate at which new mass is produced is proportional to the mass already present. 
+Over a short time interval $\Dt$, 
+\[
+    M(t+\Dt) = M(t) + kM(t)\Dt,
+\] 
+where $k$ is the fractional growth rate. 
+Rearranging, 
+\[
+    \frac{M(t+\Dt)-M(t)}{\Dt} = kM(t).
+\] 
+Taking the limit $\Dt\rightarrow 0$ gives 
+\[
+    \frac{\dd M}{\dd t} = kM.
+\] 
+The solution is 
+\[ 
+    M(t) = M(0)e^{kt}.
+\] 
+Thus a constant fractional growth rate produces exponential growth.
+
+
+\subsubsection*{Assumptions}
+
+This simple model assumes that
+
+\begin{itemize}
+    \item the cell can be described by a single coarse-grained variable $M(t)$;
+    \item the amount of active protein-production machinery is
+    approximately proportional to cell mass;
+    \item the protein-production rate per unit mass is approximately
+    constant;
+    \item nutrients and other resources are not limiting over the time interval considered;
+    \item degradation and other losses are either negligible or already incorporated into the effective rate constant $k$;
+    \item fluctuations in individual molecular events can be neglected, so that a deterministic continuum description is appropriate.
+\end{itemize}
+
+
+% ====================
+\subsection{Biological turnover}
+% ====================
+
+Biological systems continually replace their components. Examples include
+\begin{itemize}
+    \item red blood cells,
+    \item photoreceptor components,
+    \item proteins and RNA molecules,
+    \item cells in renewing tissues.
+\end{itemize}
+
+A simple birth-death model illustrates how turnover can generate a steady state even when individual molecules are continuously produced and destroyed.
+
+
+% ====================
+\subsection{mRNA production and degradation}
+% ====================
+
+Let $m(t)$ denote the number of mRNA molecules in a cell.
+
+Suppose that
+\begin{itemize}
+    \item mRNA molecules are produced at a constant rate $r$;
+    \item each existing mRNA has a constant probability per unit time $\gamma$ of being degraded.
+\end{itemize}
+
+For example, a typical order-of-magnitude transcription rate might be
+\[
+    r \sim 1 \text{ mRNA per few minutes},
+\]
+while the characteristic mRNA lifetime is
+\[
+    \tau = \frac{1}{\gamma}.
+\]
+Over a small time interval $\Dt$,
+\begin{align*}
+    m(t+\Dt) &= m(t) + \text{mRNAs produced} - \text{mRNAs degraded}
+    \\
+    &= m(t) + r\Dt - \gamma m(t)\Dt.
+\end{align*}
+Therefore,
+\[
+    \frac{m(t+\Dt)-m(t)}{\Dt} = r-\gamma m(t).
+\]
+Taking $\Dt \rightarrow 0$,
+\[
+    \frac{\dd m}{\dd t} = r-\gamma m.
+\]
+
+At steady state,
+\[
+    \frac{\dd m}{\dd t}=0,
+\]
+so
+\[
+    m_{\mathrm{ss}} = \frac{r}{\gamma}.
+\]
+The full solution is
+
+\[
+    m(t) = \frac{r}{\gamma} + \left( m(0)-\frac{r}{\gamma} \right) e^{-\gamma t}.
+\]
+Thus the system approaches its steady-state mRNA number on the characteristic timescale
+\[
+    \tau = \frac{1}{\gamma}.
+\]
+
+% ====================
+\subsubsection*{Assumptions}
+% ====================
+
+The deterministic model assumes that
+
+\begin{itemize}
+    \item transcription occurs at a constant average rate $r$;
+    \item degradation is first-order: each mRNA has the same constant degradation probability per unit time;
+    \item mRNA molecules act independently;
+    \item $r$ and $\gamma$ do not vary with time;
+    \item discrete molecular fluctuations are ignored.
+\end{itemize}
+
+At the level of individual molecules, transcription and degradation are
+stochastic processes. The equation above describes the mean behavior.
+

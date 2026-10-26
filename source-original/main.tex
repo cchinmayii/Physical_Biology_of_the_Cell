@@ -1,0 +1,260 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{import}
+\usepackage{tabularx}
+\usepackage{array}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{titlesec}
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Dt}{\Delta t}
+
+% ------------------------------------------------------------
+% Mini plots for distributions
+% ------------------------------------------------------------
+% ------------------------------------------------------------
+% Mini plots for probability distributions
+% ------------------------------------------------------------
+
+\newcommand{\miniBinomial}{%
+    \begin{tikzpicture}[baseline=(current bounding box.center)]
+        \begin{axis}[
+            width=2.2cm,
+            height=1.3cm,
+            scale only axis,
+            axis x line*=bottom,
+            axis y line=none,
+            xtick=\empty,
+            ytick=\empty,
+            xmin=-0.5,
+            xmax=6.5,
+            ymin=0,
+            ymax=0.34
+        ]
+            \addplot[ycomb,mark=*,mark size=1pt] coordinates {
+                (0,0.0156)
+                (1,0.0938)
+                (2,0.2344)
+                (3,0.3125)
+                (4,0.2344)
+                (5,0.0938)
+                (6,0.0156)
+            };
+        \end{axis}
+    \end{tikzpicture}%
+}
+
+\newcommand{\miniPoisson}{%
+    \begin{tikzpicture}[baseline=(current bounding box.center)]
+        \begin{axis}[
+            width=2.2cm,
+            height=1.3cm,
+            scale only axis,
+            axis x line*=bottom,
+            axis y line=none,
+            xtick=\empty,
+            ytick=\empty,
+            xmin=-0.5,
+            xmax=8.5,
+            ymin=0,
+            ymax=0.25
+        ]
+            \addplot[ycomb,mark=*,mark size=1pt] coordinates {
+                (0,0.0498)
+                (1,0.1494)
+                (2,0.2240)
+                (3,0.2240)
+                (4,0.1680)
+                (5,0.1008)
+                (6,0.0504)
+                (7,0.0216)
+                (8,0.0081)
+            };
+        \end{axis}
+    \end{tikzpicture}%
+}
+
+\newcommand{\miniGaussian}{%
+    \begin{tikzpicture}[baseline=(current bounding box.center)]
+        \begin{axis}[
+            width=2.2cm,
+            height=1.3cm,
+            scale only axis,
+            axis x line*=bottom,
+            axis y line=none,
+            xtick=\empty,
+            ytick=\empty,
+            xmin=-3,
+            xmax=3,
+            ymin=0,
+            ymax=1.05,
+            domain=-3:3,
+            samples=60
+        ]
+            \addplot[thick] {exp(-x^2/2)};
+        \end{axis}
+    \end{tikzpicture}%
+}
+
+\newcommand{\miniExponential}{%
+    \begin{tikzpicture}[baseline=(current bounding box.center)]
+        \begin{axis}[
+            width=2.2cm,
+            height=1.3cm,
+            scale only axis,
+            axis x line*=bottom,
+            axis y line=none,
+            xtick=\empty,
+            ytick=\empty,
+            xmin=0,
+            xmax=4,
+            ymin=0,
+            ymax=1.05,
+            domain=0:4,
+            samples=60
+        ]
+            \addplot[thick] {exp(-x)};
+        \end{axis}
+    \end{tikzpicture}%
+}
+
+\newcommand{\miniGeometric}{%
+    \begin{tikzpicture}[baseline=(current bounding box.center)]
+        \begin{axis}[
+            width=2.2cm,
+            height=1.3cm,
+            scale only axis,
+            axis x line*=bottom,
+            axis y line=none,
+            xtick=\empty,
+            ytick=\empty,
+            xmin=-0.5,
+            xmax=7.5,
+            ymin=0,
+            ymax=0.43
+        ]
+            \addplot[ycomb,mark=*,mark size=1pt] coordinates {
+                (0,0.4000)
+                (1,0.2400)
+                (2,0.1440)
+                (3,0.0864)
+                (4,0.0518)
+                (5,0.0311)
+                (6,0.0187)
+                (7,0.0112)
+            };
+        \end{axis}
+    \end{tikzpicture}%
+}
+
+\title{\huge{Physical Biology of the Cell} \\ \medskip \Large{Rob Phillips and Jan\'{e} Kondev}}
+\author{Course Notes by Chinmayi Subramanya}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\import{}{day1.tex}
+\import{}{day2.tex}
+\import{}{day3.tex}
+\import{}{day4.tex}
+\import{}{day5.tex}
+
+
+
+% ====================
+\clearpage
+\section*{Notation Summary}
+% ====================
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+Symbol & Meaning \\
+\hline
+$M(t)$ & cell mass at time $t$ \\
+$k$ & growth rate or hopping rate, depending on context \\
+$m(t)$ & number of mRNA molecules \\
+$r$ & mRNA production rate \\
+$\gamma$ & mRNA degradation rate \\
+$1/\gamma$ & characteristic mRNA lifetime \\
+$P(x,t)$ & probability density/probability at position $x$ and time $t$ \\
+$a$ & random-walk step length / lattice spacing \\
+$\Dt$ & discrete time step \\
+$L$ & length of the periodic spatial domain \\
+$n$ & Fourier mode number \\
+$q_n$ & wave number of Fourier mode $n$ \\
+$\lambda_n$ & wavelength of Fourier mode $n$ \\
+$D$ & diffusion constant, $D=ka^2$ \\
+$r_n$ & eigenvalue of one discrete random-walk time step \\
+$J$ & diffusive flux \\
+\hline
+\end{tabular}
+\end{center}
+
+
+% % ====================
+% \section{Key Conceptual Chain}
+% % ====================
+
+% The main mathematical story of Day 3 can be summarized as
+
+% \begin{equation}
+% \boxed{
+%     \begin{gathered}
+%         \text{symmetric random walk}
+%         \\[3pt]
+%         \Downarrow
+%         \\[3pt]
+%         \text{discrete Laplacian}
+%         \\[3pt]
+%         \Downarrow
+%         \\[3pt]
+%         \text{continuum limit}
+%         \\[3pt]
+%         \Downarrow
+%         \\[3pt]
+%         \frac{\partial P}{\partial t}
+%         =
+%         D\frac{\partial^2P}{\partial x^2}
+%         \\[3pt]
+%         \Downarrow
+%         \\[3pt]
+%         \text{Fourier modes are eigenfunctions}
+%         \\[3pt]
+%         \Downarrow
+%         \\[3pt]
+%         P_n(x,t)
+%         \propto
+%         e^{-Dq_n^2t}
+%         \\[3pt]
+%         \Downarrow
+%         \\[3pt]
+%         \text{short wavelengths decay fastest}
+%         \\[3pt]
+%         \Downarrow
+%         \\[3pt]
+%         \text{diffusion smooths spatial structure.}
+%     \end{gathered}
+% }
+% \end{equation}
+
+
+\end{document}

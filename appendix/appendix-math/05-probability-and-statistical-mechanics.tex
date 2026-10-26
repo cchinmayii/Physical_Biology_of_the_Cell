@@ -1,0 +1,135 @@
+\subsection{Probability, expectation, and variance}
+\label{math:probability}
+
+For discrete states, $p_i\geq0$ and $\sum_i p_i=1$.
+The expectation is
+\[
+    \langle f\rangle=\sum_i p_i f_i.
+\]
+If $m=0,1,2$ with probabilities $0.2$, $0.5$, and $0.3$, then $\langle m\rangle=1.1$.
+No cell needs to contain $1.1$ molecules; it is a population mean.
+
+For a continuous variable, a density satisfies
+\[
+    p(x)\geq0, \qquad \int p(x)\,\dd x=1.
+\]
+The probability of an interval is the integral of the density over that interval.
+A density can exceed one because it has units; only integrated probabilities must lie between zero and one.
+
+Variance and standard deviation are
+\[
+    \operatorname{Var}(X)=\langle X^2\rangle-\langle X\rangle^2, \qquad \sigma_X=\sqrt{\operatorname{Var}(X)}.
+\]
+
+Conditional probability and Bayes' theorem are
+\[
+    P(A\mid B)=\frac{P(A\cap B)}{P(B)}, \qquad P(A\mid B)=\frac{P(B\mid A)P(A)}{P(B)}.
+\]
+Events are independent only if $P(A\cap B)=P(A)P(B)$.
+
+Table~\ref{tab: prob_distributions} summarizes the course distributions.
+Match the mechanism to the distribution: fixed independent trials give binomial counts; constant-rate independent events give Poisson counts and exponential waiting times.
+
+
+\subsection{Waiting times and survival probabilities}
+\label{math:survival}
+
+A waiting time $T$ is the time until an event occurs, such as a molecule unbinding from a receptor.
+The probability density $p(t)$ describes how likely the event is to occur near time $t$.
+The survival probability $S(t)$ is the probability that the event has not yet occurred by time $t$:
+\[
+    S(t)=P(T>t).
+\]
+As $S(t)$ decreases, the lost probability appears in the waiting-time density, so
+\[
+    p(t)=-\frac{\dd S}{\dd t}.
+\]
+If the event occurs with a constant rate $\lambda$, the waiting time is exponentially distributed:
+\[
+    S(t)=e^{-\lambda t}, \qquad p(t)=\lambda e^{-\lambda t}, \qquad \langle T\rangle=\frac{1}{\lambda}.
+\]
+The mean waiting time is therefore the inverse of the event rate.
+
+\paragraph{Worked example}
+For $k_{\mathrm{off}}=0.2\,\mathrm{s}^{-1}$, the mean bound lifetime is $5\,\mathrm{s}$ and $P(T>10\,\mathrm{s})=e^{-2}\approx0.135$.
+
+
+\subsection{Combinatorics and binomial coefficients}
+\label{math:combinatorics}
+
+The factorial $n!=n(n-1)\cdots1$ counts orderings of $n$ distinct objects.
+The number of unordered choices of $k$ objects from $n$ is
+\[
+    \binom{n}{k}=\frac{n!}{k!(n-k)!}.
+\]
+
+For $\Omega$ sites and $L$ indistinguishable ligands with at most one ligand per site,
+\[
+    W(L)=\binom{\Omega}{L}, \qquad \frac{W(L-1)}{W(L)}=\frac{L}{\Omega-L+1}\approx\frac{L}{\Omega}
+\]
+in the dilute limit.
+
+For $n$ independent trials with success probability $p$,
+\[
+    P(K=k)=\binom{n}{k}p^k(1-p)^{n-k}.
+\]
+
+
+\subsection{Boltzmann factors, partition functions, and free energy}
+\label{math:boltzmann}
+
+At thermal equilibrium, a system can occupy states indexed by $i$, each with energy $E_i$.
+The Boltzmann factor
+\[
+    w_i=e^{-\beta E_i}, \qquad \beta=\frac{1}{k_BT},
+\]
+is the relative statistical weight of state $i$; states with lower energy have larger weight.
+Here $k_B$ is Boltzmann's constant and $T$ is absolute temperature, so $1/\beta=k_BT$ is the thermal energy scale.
+The partition function is the sum of all weights,
+\[
+    Z=\sum_i w_i=\sum_i e^{-\beta E_i}.
+\]
+It provides the normalization needed to convert the weight of state $i$ into its probability:
+\[
+    p_i=\frac{w_i}{Z}=\frac{e^{-\beta E_i}}{Z}.
+\]
+
+For macrostates with multiplicities $W_A,W_B$ and energies $E_A,E_B$,
+\[
+    \frac{P_B}{P_A}=\frac{W_B}{W_A}e^{-\beta(E_B-E_A)}.
+\]
+Low energy and high multiplicity both increase probability.
+With $S=k_B\ln W$ and $F=E-TS$, the total macrostate weight is $e^{-\beta F}$.
+
+\paragraph{Worked example: one ligand and one receptor}
+With one bound state of energy $\epsilon_b$ and $\Omega$ unbound states of energy zero,
+\[
+    p_b=\frac{e^{-\beta\epsilon_b}}{\Omega+e^{-\beta\epsilon_b}}=\frac{1}{1+e^{\beta\Delta F}},
+\]
+where $\Delta F=\epsilon_b+k_BT\ln\Omega$.
+Binding energy competes with the multiplicity of unbound positions.
+
+
+\subsection{Entropy and constrained optimization with Lagrange multipliers}
+\label{math:constraints}
+
+Let $p_i$ be the probability of state $i$, with $p_i\geq0$ and $\sum_i p_i=1$.
+The dimensionless Shannon entropy is
+\[
+    S=-\sum_i p_i\ln p_i.
+\]
+It is zero for certainty and maximal for a uniform distribution when normalization is the only constraint.
+
+To maximize $f(\mathbf{x})$ subject to $g(\mathbf{x})=c$, define
+\[
+    \mathcal{L}=f-\lambda(g-c)
+\]
+and solve $\nabla\mathcal{L}=0$ together with the constraint.
+
+Maximizing entropy subject to normalization and mean energy gives
+\[
+    \mathcal{L}=-\sum_i p_i\ln p_i-\alpha\left(\sum_i p_i-1\right)-\beta\left(\sum_i p_iE_i-\langle E\rangle\right).
+\]
+Differentiation gives $p_i\propto e^{-\beta E_i}$.
+The multiplier $\beta$ becomes physical inverse temperature only when the constrained quantity is energy in the appropriate thermodynamic setting.
+

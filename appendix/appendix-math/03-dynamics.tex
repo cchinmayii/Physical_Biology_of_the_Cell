@@ -1,0 +1,126 @@
+\subsection{Ordinary differential equations and relaxation}
+\label{math:ode}
+
+An ordinary differential equation, or ODE, relates a quantity to derivatives with respect to one independent variable, usually time.
+Solving an ODE means finding a function that satisfies both the equation and an initial condition.
+
+For $\dd y/\dd t=ky$, separation of variables and integration give
+\[
+    y(t)=y(0)e^{kt}.
+\]
+Positive $k$ gives growth and negative $k$ gives decay.
+
+For production and first-order loss,
+\[
+    \frac{\dd y}{\dd t}=A-By,
+\]
+the steady state and full solution are
+\[
+    y_{\mathrm{ss}}=\frac{A}{B}, \qquad y(t)=\frac{A}{B}+\left[y(0)-\frac{A}{B}\right]e^{-Bt}.
+\]
+The relaxation time is $\tau=1/B$.
+
+\paragraph{Worked example: mRNA turnover}
+For $r=6\,\text{mRNA}\,\mathrm{h}^{-1}$, $\gamma=2\,\mathrm{h}^{-1}$, and $m(0)=0$,
+\[
+    m(t)=3\left(1-e^{-2t}\right).
+\]
+After one relaxation time, the system has completed about $63\%$ of the change to steady state.
+
+\paragraph{Linearizing near a steady state}
+For an autonomous equation $\dd y/\dd t=f(y)$, a steady state $y_*$ satisfies $f(y_*)=0$.
+To determine what happens near the steady state, write the solution as $y(t)=y_*+\delta y(t)$, where $\delta y$ is a small displacement from $y_*$.
+A Taylor expansion gives
+\[
+    f(y_*+\delta y)=f(y_*)+f'(y_*)\delta y+\mathcal{O}(\delta y^2).
+\]
+Because $f(y_*)=0$, neglecting terms quadratic and higher order in the small displacement gives
+\[
+    \frac{\dd\,\delta y}{\dd t}\approx f'(y_*)\delta y.
+\]
+This replacement of the original nonlinear equation by a linear approximation near the steady state is called \emph{linearization}.
+Its solution is
+\[
+    \delta y(t)=\delta y(0)e^{f'(y_*)t}.
+\]
+If $f'(y_*)<0$, small displacements decay and the steady state is locally stable.
+If $f'(y_*)>0$, small displacements grow and the steady state is locally unstable.
+If $f'(y_*)=0$, this linear approximation does not determine the stability, and higher-order terms must be considered.
+
+
+\subsection{Gain-loss bookkeeping and master equations}
+\label{math:master}
+
+A master equation is an evolution equation for probabilities.
+It is built by listing every way probability enters a state and every way it leaves.
+
+\paragraph{Worked example: a lattice random walk}
+Let $p_n(t)$ be the probability of finding a walker at lattice site $n$ at time $t$.
+The walker jumps to either neighboring site at rate $k$.
+Site $n$ gains probability from sites $n-1$ and $n+1$ and loses probability through its two outgoing jumps, so
+\[
+    \frac{\dd p_n}{\dd t}=kp_{n-1}+kp_{n+1}-2kp_n.
+\]
+The first two terms are gains and the last term is the loss.
+When the equations are summed over all sites, every jump appears once as a loss from one site and once as a gain to another, so total probability remains one.
+
+
+\subsection{Partial differential equations, separation of variables, and boundary conditions}
+\label{math:separation}
+
+A PDE involves derivatives with respect to more than one independent variable.
+The diffusion equation
+\[
+    \frac{\partial P}{\partial t}=D\frac{\partial^2P}{\partial x^2}
+\]
+requires an initial spatial profile and boundary conditions.
+
+\paragraph{Boundary conditions}
+The diffusion equation describes how the profile changes inside a spatial domain, but it does not specify what happens at the edges.
+Boundary conditions supply this missing information.
+On a one-dimensional interval $0\leq x\leq L$, three common choices are the following.
+
+\begin{itemize}
+    \item \textbf{Periodic boundaries.}
+    The two ends of the interval are treated as the same point:
+    \[
+        P(0,t)=P(L,t), \qquad \left.\frac{\partial P}{\partial x}\right|_{x=0}=\left.\frac{\partial P}{\partial x}\right|_{x=L}.
+    \]
+    Probability leaving through one end re-enters through the other, as if the interval had been joined into a ring.
+    Periodic boundaries permit Fourier modes with wave numbers $q_n=2\pi n/L$.
+
+    \item \textbf{Fixed-value boundaries.}
+    The value of the field is prescribed at each edge:
+    \[
+        P(0,t)=P_{\mathrm{left}}, \qquad P(L,t)=P_{\mathrm{right}}.
+    \]
+    These are also called \emph{Dirichlet boundary conditions}.
+    For temperature diffusion, they describe ends held at fixed temperatures.
+    For a probability density, the choice $P=0$ at an edge represents an absorbing boundary: probability reaching that edge leaves the system.
+
+    \item \textbf{Zero-flux boundaries.}
+    Nothing is allowed to cross either edge:
+    \[
+        J(0,t)=J(L,t)=0.
+    \]
+    Using Fick's law, $J=-D\,\partial P/\partial x$, this is equivalent to
+    \[
+        \left.\frac{\partial P}{\partial x}\right|_{x=0}=\left.\frac{\partial P}{\partial x}\right|_{x=L}=0.
+    \]
+    These are also called \emph{Neumann} or \emph{reflecting} boundary conditions.
+    They conserve the total probability inside the interval.
+\end{itemize}
+
+Boundary conditions determine which spatial modes are allowed, while the initial condition $P(x,0)$ determines the amplitude of each allowed mode.
+
+Trying $P(x,t)=X(x)T(t)$ gives
+\[
+    \frac{1}{DT}\frac{\dd T}{\dd t}=\frac{1}{X}\frac{\dd^2X}{\dd x^2}=-q^2.
+\]
+Hence
+\[
+    T(t)=T_0e^{-Dq^2t}, \qquad X(x)=A\cos(qx)+B\sin(qx).
+\]
+Periodic boundaries select $q_n=2\pi n/L$.
+Boundary conditions select allowed modes; initial conditions select their amplitudes.
+

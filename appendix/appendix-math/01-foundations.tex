@@ -1,0 +1,53 @@
+\subsection{Reading mathematical notation}
+\label{math:language}
+
+\subsubsection{Indices, sums, and products}
+
+An index labels members of a collection.
+In $x_i$, the index $i$ might label a cell, measurement, spatial site, or component of a vector.
+The summation notation
+\[
+    \sum_{i=1}^{N}x_i=x_1+x_2+\cdots+x_N
+\]
+means to add the terms obtained by letting $i$ run from $1$ to $N$.
+Similarly,
+\[
+    \prod_{i=1}^{N}x_i=x_1x_2\cdots x_N.
+\]
+
+Indices are dummy labels inside a complete sum.
+For example, $\sum_{i=1}^{N}x_i=\sum_{j=1}^{N}x_j$.
+The symbol used for the index changes, but the value does not.
+
+\paragraph{Worked example: a sample mean}
+For measurements $x_1=2$, $x_2=5$, and $x_3=8$, the sample mean is
+\[
+    \bar{x}=\frac{1}{3}\sum_{i=1}^{3}x_i=\frac{2+5+8}{3}=5.
+\]
+
+\subsubsection{Powers, exponentials, and logarithms}
+
+The exponential function $e^x$ is special because its derivative equals itself.
+It converts addition in the exponent into multiplication:
+\[
+    e^{a+b}=e^ae^b.
+\]
+The natural logarithm $\ln x$ is its inverse:
+\[
+    \ln(e^x)=x, \qquad e^{\ln x}=x \quad (x>0).
+\]
+Useful logarithm rules are
+\[
+    \ln(xy)=\ln x+\ln y, \qquad \ln\left(\frac{x}{y}\right)=\ln x-\ln y, \qquad \ln(x^a)=a\ln x.
+\]
+
+Exponential growth has the form $M(t)=M_0e^{kt}$ with $k>0$.
+Its doubling time $t_2$ satisfies $M(t_2)=2M_0$, so
+\[
+    t_2=\frac{\ln2}{k}.
+\]
+Exponential decay has the form $A(t)=A_0e^{-t/\tau}$.
+The time $\tau$ is the time at which the amplitude has fallen to $1/e$ of its initial value.
+
+
+

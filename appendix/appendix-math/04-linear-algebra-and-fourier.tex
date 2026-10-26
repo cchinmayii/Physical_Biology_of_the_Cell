@@ -1,0 +1,143 @@
+\subsection{Vectors, matrices, and systems of linear equations}
+\label{math:linear}
+
+A vector is an ordered list of components in a chosen coordinate system,
+\[
+    \mathbf{x}=\begin{pmatrix}x_1\\x_2\\\vdots\\x_n\end{pmatrix}.
+\]
+The dot product and Euclidean length are
+\[
+    \mathbf{x}\cdot\mathbf{y}=\sum_i x_i y_i, \qquad \lVert\mathbf{x}\rVert=\sqrt{\mathbf{x}\cdot\mathbf{x}}.
+\]
+Vectors are orthogonal when their dot product is zero.
+
+A matrix maps one vector to another.
+For
+\[
+    A=\begin{pmatrix}a&b\\c&d\end{pmatrix}, \qquad \mathbf{x}=\begin{pmatrix}x\\y\end{pmatrix},
+\]
+we have
+\[
+    A\mathbf{x}=\begin{pmatrix}ax+by\\cx+dy\end{pmatrix}.
+\]
+Matrix multiplication is generally not commutative: $AB\ne BA$.
+
+For a linear system $A\mathbf{x}=\mathbf{b}$, the formal solution $\mathbf{x}=A^{-1}\mathbf{b}$ exists when $A$ is invertible, but numerical work generally solves the system directly.
+
+
+\subsection{Eigenvalues, eigenvectors, and eigenfunctions}
+\label{math:eigen}
+
+An eigenvector is a direction preserved by a matrix:
+\[
+    A\mathbf{v}=\lambda\mathbf{v}.
+\]
+The eigenvalue $\lambda$ multiplies its amplitude.
+Eigenvalues satisfy $\det(A-\lambda I)=0$, where $\det$ denotes the determinant and $I$ denotes the identity matrix.
+For a two-dimensional system,
+\[
+    A=\begin{pmatrix}a&b\\c&d\end{pmatrix},
+    \qquad
+    I=\begin{pmatrix}1&0\\0&1\end{pmatrix}.
+\]
+The determinant of a $2\times2$ matrix is
+\[
+    \det\begin{pmatrix}a&b\\c&d\end{pmatrix}=ad-bc.
+\]
+Therefore,
+\[
+    \det(A-\lambda I)
+    =
+    \det\begin{pmatrix}a-\lambda&b\\c&d-\lambda\end{pmatrix}
+    =
+    (a-\lambda)(d-\lambda)-bc.
+\]
+Setting this expression equal to zero gives a polynomial equation for $\lambda$ whose solutions are the eigenvalues of $A$.
+
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}[>=Stealth,scale=1.0]
+        \begin{scope}[xshift=-3.0cm]
+            \draw[step=0.5cm,very thin,black!15] (-1.5,-1.5) grid (1.5,1.5);
+            \draw[->,black!65] (-1.6,0)--(1.7,0) node[right] {$x$};
+            \draw[->,black!65] (0,-1.6)--(0,1.7) node[above] {$y$};
+            \draw[->,very thick,blue!70!black] (0,0)--(0.8,0.8) node[above left] {$\mathbf v$};
+            \draw[->,very thick,orange!85!black] (0,0)--(1,-0.4) node[below right] {$\mathbf w$};
+            \node[font=\bfseries] at (0,-2.0) {original space};
+        \end{scope}
+        \draw[->,very thick] (-0.7,0)--(0.7,0) node[midway,above] {$A$};
+        \begin{scope}[xshift=3.0cm]
+            \foreach \t in {-1,-0.5,0,0.5,1} {
+                \draw[very thin,black!15] ({1.4*(-1)+0.6*\t},{0.6*(-1)+1.4*\t}) -- ({1.4*(1)+0.6*\t},{0.6*(1)+1.4*\t});
+                \draw[very thin,black!15] ({1.4*\t+0.6*(-1)},{0.6*\t+1.4*(-1)}) -- ({1.4*\t+0.6*(1)},{0.6*\t+1.4*(1)});
+            }
+            \draw[->,black!65] (-1.8,0)--(1.9,0) node[right] {$x$};
+            \draw[->,black!65] (0,-1.8)--(0,1.9) node[above] {$y$};
+            \draw[->,very thick,blue!70!black] (0,0)--(1.6,1.6) node[above left] {$A\mathbf v=2\mathbf v$};
+            \draw[->,very thick,orange!85!black] (0,0)--(1.16,0.04) node[below right] {$A\mathbf w$};
+            \node[font=\bfseries] at (0,-2.0) {transformed space};
+        \end{scope}
+    \end{tikzpicture}
+    \caption{The matrix $A=\left(\begin{smallmatrix}1.4&0.6\\0.6&1.4\end{smallmatrix}\right)$ deforms the coordinate grid. The eigenvector $\mathbf v=(0.8,0.8)^{\mathsf T}$ is stretched without changing direction, while the generic vector $\mathbf w=(1,-0.4)^{\mathsf T}$ changes both length and direction}
+    \label{fig:linear-transformation-eigenvector}
+\end{figure}
+
+\paragraph{Worked example}
+For
+\[
+    A=\begin{pmatrix}1.4&0.6\\0.6&1.4\end{pmatrix},
+\]
+take the vectors used in Figure~\ref{fig:linear-transformation-eigenvector}:
+\[
+    \mathbf{v}=\begin{pmatrix}0.8\\0.8\end{pmatrix}, \qquad \mathbf{w}=\begin{pmatrix}1\\-0.4\end{pmatrix}.
+\]
+Multiplication gives
+\[
+    A\mathbf{v}=\begin{pmatrix}1.6\\1.6\end{pmatrix}=2\mathbf{v}, \qquad A\mathbf{w}=\begin{pmatrix}1.16\\0.04\end{pmatrix}.
+\]
+Thus $\mathbf{v}$ is an eigenvector: it is stretched by a factor of two without changing direction.
+The vector $\mathbf{w}$ changes direction and is not an eigenvector.
+
+An eigenfunction $f$ of an operator $\mathcal{L}$ satisfies $\mathcal{L}f=\lambda f$.
+For example,
+\[
+    \frac{\dd^2}{\dd x^2}e^{iqx}=-q^2e^{iqx}.
+\]
+
+For a real symmetric matrix such as this one, eigenvectors associated with different eigenvalues are perpendicular.
+
+
+\subsection{Fourier series, superposition, and delta distributions}
+\label{math:fourier}
+
+A Fourier series represents a periodic function as a sum of sines and cosines with different wavelengths.
+The coefficients state how much of each wave is present in the function.
+For a periodic domain of length $L$,
+\[
+    f(x)=A_0+\sum_{n=1}^{\infty}\left[A_n\cos\left(\frac{2\pi nx}{L}\right)+B_n\sin\left(\frac{2\pi nx}{L}\right)\right].
+\]
+The coefficients are coordinates measuring each spatial frequency.
+
+Fourier modes are eigenfunctions of translation and differentiation.
+The wave number and wavelength are
+\[
+    q_n=\frac{2\pi n}{L}, \qquad \lambda_n=\frac{L}{n}.
+\]
+Orthogonality permits coefficients to be isolated, for example
+\[
+    A_n=\frac{2}{L}\int_0^Lf(x)\cos(q_nx)\,\dd x.
+\]
+
+For diffusion, each mode evolves independently as
+\[
+    P_n(x,t)=P_n(x,0)e^{-Dq_n^2t}.
+\]
+An $n=3$ mode decays nine times faster than an $n=1$ mode on the same domain.
+
+The Dirac delta is defined by
+\[
+    \int\delta(x-x_0)f(x)\,\dd x=f(x_0).
+\]
+It is an idealized unit amount concentrated at one point, not an ordinary function.
+A finite Fourier approximation to it can oscillate and need not remain nonnegative everywhere.
+

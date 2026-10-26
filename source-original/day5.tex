@@ -1,0 +1,652 @@
+% ============================================================
+\section{Day 5}
+% ============================================================
+
+% For the coupled-oscillator figure:
+% \usetikzlibrary{decorations.pathmorphing}
+
+% ============================================================
+\subsection{Readings and resources}
+% ============================================================
+
+\subsubsection{Readings}
+
+\begin{itemize}
+    \item Christine Rosen, \textit{The Extinction of Experience: Being Human in a Disembodied World}.
+    \item Frederick Douglass, \textit{Narrative of the Life of Frederick Douglass, an American Slave}.
+\end{itemize}
+
+\subsubsection{Popular biology books for physicists}
+
+\begin{itemize}
+    \item Ron Milo and Rob Phillips, \textit{Cell Biology by the Numbers}.
+    \item Bruce Alberts et al., \textit{Essential Cell Biology}.
+    \item Sean B. Carroll, \textit{The Serengeti Rules}.
+    \item Mark Ptashne, \textit{A Genetic Switch}.
+    \item Horace Freeland Judson, \textit{The Eighth Day of Creation}.
+    \item Philip Ball, \textit{How Life Works}.
+    \item Paul Nurse, \textit{What Is Life?}
+    \item Ed Yong, \textit{An Immense World}.
+\end{itemize}
+
+\subsubsection{Popular physics books for biologists}
+
+\begin{itemize}
+    \item Albert Einstein and Leopold Infeld, \textit{The Evolution of Physics}.
+    \item George Gamow, \textit{Biography of Physics}.
+    \item I. Bernard Cohen, \textit{The Birth of a New Physics}.
+\end{itemize}
+
+\subsubsection{Mathematics resources}
+
+\begin{itemize}
+    \item Gilbert Strang, \textit{Introduction to Linear Algebra}.
+    \item 3Blue1Brown, particularly the \textit{Essence of Linear Algebra} series.
+\end{itemize}
+
+
+% ============================================================
+\subsection{Representations}
+% ============================================================
+
+The way in which a problem is represented can determine which aspects of the problem become easy or difficult to see.
+A useful representation exposes the structure that matters while suppressing details that are irrelevant to the question being asked.
+
+The same idea applies to how we describe ourselves.
+Labels such as ``physicist'' or ``biologist'' are only one possible representation and may hide much of the information that actually characterizes a person.
+
+
+% ------------------------------------------------------------
+\subsubsection{1. Vectors}
+% ------------------------------------------------------------
+
+Many complicated objects can be represented as vectors.
+Once an object has been written as a vector, the tools of linear algebra can be used to compare objects, transform representations, and identify important directions of variation.
+
+Examples include:
+
+\begin{itemize}
+    \item an image, represented by a vector of pixel intensities;
+    \item a transcriptome, represented by a vector of gene-expression levels;
+    \item a biological shape, represented by coordinates or by coefficients in a suitable basis, such as spherical harmonics or finite elements;
+    \item a probability distribution, represented by the probabilities associated with each possible state.
+\end{itemize}
+
+
+% ------------------------------------------------------------
+\paragraph{Example: the Buri experiment}
+% ------------------------------------------------------------
+
+Consider again the Buri experiment.
+Each vial contains 16 diploid flies, so there are
+
+\begin{equation}
+    2\times16=32
+\end{equation}
+
+copies of the relevant locus.
+
+Let $n_R$ denote the number of red alleles in a vial.
+The possible values are
+
+\begin{equation}
+    n_R=0,1,2,\ldots,32.
+\end{equation}
+
+There are therefore 33 possible allele-count states.
+
+The allele count $n_R$ itself is a single discrete variable.
+However, a probability distribution over all possible allele counts can be represented by a vector with 33 components,
+
+\begin{equation}
+    \mathbf{p} =
+    \begin{pmatrix}
+        p_0 \\
+        p_1 \\
+        \vdots \\
+        p_{32}
+    \end{pmatrix}.
+\end{equation}
+
+Here
+
+\begin{equation}
+    p_i=P(n_R=i).
+\end{equation}
+
+The vector therefore lives in a 33-dimensional vector space, although not every vector in that space is a valid probability distribution.
+The components must satisfy
+
+\begin{equation}
+    p_i\geq0
+\end{equation}
+
+and
+
+\begin{equation}
+    \sum_{i=0}^{32}p_i=1.
+\end{equation}
+
+Thus a stochastic evolutionary process can be viewed as the time evolution of a probability vector over the possible allele-count states.
+
+
+% ============================================================
+\subsection{2. Fitting data}
+% ============================================================
+
+Suppose we have $N$ data points
+
+\begin{equation}
+    (x_1,y_1),(x_2,y_2),\ldots,(x_N,y_N)
+\end{equation}
+
+and wish to represent them by a straight line,
+
+\begin{equation}
+    y=ax+b.
+\end{equation}
+
+For each data point, the residual between the observed and predicted value is
+
+\begin{equation}
+    r_i=y_i-(ax_i+b).
+\end{equation}
+
+The least-squares method chooses $a$ and $b$ to minimize the sum of the squared residuals,
+
+\begin{equation}
+    E(a,b)=\sum_{i=1}^{N}\left[y_i-(ax_i+b)\right]^2.
+\end{equation}
+
+This provides a quantitative definition of the ``best-fitting'' line.
+
+
+% ------------------------------------------------------------
+\subsubsection{Why squares?}
+% ------------------------------------------------------------
+
+One reason squared errors arise naturally is that measurement errors are often modeled as independent Gaussian random variables.
+
+Suppose
+
+\begin{equation}
+    y_i=ax_i+b+\epsilon_i,
+\end{equation}
+
+where
+
+\begin{equation}
+    \epsilon_i\sim\mathcal{N}(0,\sigma^2).
+\end{equation}
+
+The probability density of observing $y_i$ for given $a$ and $b$ is then
+
+\begin{equation}
+    p(y_i\mid x_i,a,b)=\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{\left(y_i-ax_i-b\right)^2}{2\sigma^2}\right].
+\end{equation}
+
+Assuming that the errors of different measurements are independent, the likelihood of the complete dataset is
+
+\begin{equation}
+    \mathcal{L}(a,b)=\prod_{i=1}^{N}p(y_i\mid x_i,a,b).
+\end{equation}
+
+Taking the logarithm converts the product into a sum,
+
+\begin{equation}
+    \ln\mathcal{L}(a,b)=\text{constant}-\frac{1}{2\sigma^2}\sum_{i=1}^{N}\left[y_i-(ax_i+b)\right]^2.
+\end{equation}
+
+Maximizing the likelihood is therefore equivalent to minimizing
+
+\begin{equation}
+    \sum_{i=1}^{N}\left[y_i-(ax_i+b)\right]^2.
+\end{equation}
+
+Thus least squares follows naturally from a model in which the measurement noise is independent and Gaussian with constant variance.
+
+
+% ------------------------------------------------------------
+\subsubsection{Finding the best-fit parameters}
+% ------------------------------------------------------------
+
+At the minimum of the error function,
+
+\begin{equation}
+    \frac{\partial E}{\partial a}=0
+\end{equation}
+
+and
+
+\begin{equation}
+    \frac{\partial E}{\partial b}=0.
+\end{equation}
+
+Differentiating with respect to $a$ gives
+
+\begin{equation}
+    \frac{\partial E}{\partial a}=\sum_{i=1}^{N}-2x_i\left[y_i-(ax_i+b)\right]=0.
+\end{equation}
+
+Therefore,
+
+\begin{equation}
+    a\sum_{i=1}^{N}x_i^2+b\sum_{i=1}^{N}x_i=\sum_{i=1}^{N}x_iy_i.
+\end{equation}
+
+Differentiating with respect to $b$ gives
+
+\begin{equation}
+    \frac{\partial E}{\partial b}=\sum_{i=1}^{N}-2\left[y_i-(ax_i+b)\right]=0.
+\end{equation}
+
+Therefore,
+
+\begin{equation}
+    a\sum_{i=1}^{N}x_i+Nb=\sum_{i=1}^{N}y_i.
+\end{equation}
+
+The fitting problem has now become a system of two linear equations for the two unknown parameters $a$ and $b$.
+
+
+% ------------------------------------------------------------
+\subsubsection{Matrix representation}
+% ------------------------------------------------------------
+
+The two equations can be written as
+
+\begin{equation}
+    \begin{pmatrix}
+        \sum_i x_i^2 & \sum_i x_i \\
+        \sum_i x_i & N
+    \end{pmatrix}
+    \begin{pmatrix}
+        a \\
+        b
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \sum_i x_i y_i \\
+        \sum_i y_i
+    \end{pmatrix}.
+\end{equation}
+
+A general system of linear equations has the form
+
+\begin{equation}
+    A\mathbf{x}=\mathbf{c}.
+\end{equation}
+
+Formally, if $A$ is invertible,
+
+\begin{equation}
+    \mathbf{x}=A^{-1}\mathbf{c}.
+\end{equation}
+
+For the straight-line fit, define
+
+\begin{equation}
+    \Delta=N\sum_i x_i^2-\left(\sum_i x_i\right)^2.
+\end{equation}
+
+The slope is
+
+\begin{equation}
+    \boxed{a=\frac{N\sum_i x_i y_i-\left(\sum_i x_i\right)\left(\sum_i y_i\right)}{\Delta}.}
+\end{equation}
+
+The intercept is
+
+\begin{equation}
+    \boxed{b=\frac{\left(\sum_i x_i^2\right)\left(\sum_i y_i\right)-\left(\sum_i x_i\right)\left(\sum_i x_i y_i\right)}{\Delta}.}
+\end{equation}
+
+
+% ============================================================
+\subsection{3. Finding the right coordinates}
+% ============================================================
+
+A representation can be formally correct and still be inconvenient.
+An important strategy in physics is therefore to search for coordinates in which the important structure of the problem becomes simple.
+
+
+% ------------------------------------------------------------
+\subsubsection{Coupled oscillators and normal modes}
+% ------------------------------------------------------------
+
+Consider two masses coupled by springs.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}
+
+    \draw[thick] (0,0) -- (0,1.2);
+    \draw[thick] (8,0) -- (8,1.2);
+
+    \draw[decorate,decoration={zigzag,segment length=5pt,amplitude=3pt}] (0,0.6) -- (2,0.6);
+
+    \draw[thick] (2,0.2) rectangle (3,1.0);
+    \node at (2.5,0.6) {$m$};
+
+    \draw[decorate,decoration={zigzag,segment length=5pt,amplitude=3pt}] (3,0.6) -- (5,0.6);
+
+    \draw[thick] (5,0.2) rectangle (6,1.0);
+    \node at (5.5,0.6) {$m$};
+
+    \draw[decorate,decoration={zigzag,segment length=5pt,amplitude=3pt}] (6,0.6) -- (8,0.6);
+
+    \node below at (2.5,0.15) {$x_1$};
+    \node below at (5.5,0.15) {$x_2$};
+
+\end{tikzpicture}
+\caption{Two coupled oscillators.
+The individual displacements $x_1$ and $x_2$ provide one coordinate system, while the normal modes provide another.}
+\end{figure}
+
+The individual mass displacements $x_1$ and $x_2$ are natural coordinates, but their equations of motion are coupled.
+
+For a symmetric system, more useful coordinates are the combinations
+
+\begin{equation}
+    q_{+}=\frac{x_1+x_2}{\sqrt{2}}
+\end{equation}
+
+and
+
+\begin{equation}
+    q_{-}=\frac{x_1-x_2}{\sqrt{2}}.
+\end{equation}
+
+The coordinate $q_{+}$ describes the mode in which the masses move together.
+The coordinate $q_{-}$ describes the mode in which they move oppositely.
+
+These are the normal modes of the system.
+In normal-mode coordinates, the coupled problem can be decomposed into independent motions.
+
+This illustrates the importance of finding coordinates adapted to the structure of the problem.
+
+
+% ============================================================
+\subsubsection{Covariance}
+% ============================================================
+
+The variance of a variable $x$ measures its fluctuations around its mean,
+
+\begin{equation}
+    \operatorname{Var}(x)=\left\langle\left(x-\langle x\rangle\right)^2\right\rangle.
+\end{equation}
+
+Expanding the square gives
+
+\begin{equation}
+    \operatorname{Var}(x)=\langle x^2\rangle-\langle x\rangle^2.
+\end{equation}
+
+For two variables $x_1$ and $x_2$, the covariance is
+
+\begin{equation}
+    \operatorname{Cov}(x_1,x_2)=\left\langle\left(x_1-\langle x_1\rangle\right)\left(x_2-\langle x_2\rangle\right)\right\rangle.
+\end{equation}
+
+The covariance matrix for two variables is
+
+\begin{equation}
+    C=
+    \begin{pmatrix}
+        \left\langle\left(x_1-\langle x_1\rangle\right)^2\right\rangle &
+        \left\langle\left(x_1-\langle x_1\rangle\right)\left(x_2-\langle x_2\rangle\right)\right\rangle \\
+        \left\langle\left(x_1-\langle x_1\rangle\right)\left(x_2-\langle x_2\rangle\right)\right\rangle &
+        \left\langle\left(x_2-\langle x_2\rangle\right)^2\right\rangle
+    \end{pmatrix}.
+\end{equation}
+
+The diagonal entries describe the variance of each coordinate.
+The off-diagonal entries describe how fluctuations in different coordinates are correlated.
+
+
+% ============================================================
+\subsubsection{Principal component analysis}
+% ============================================================
+
+Principal component analysis, or PCA, provides a systematic way to find coordinates that capture the dominant variation in a dataset.
+
+For variables collected into a vector $\mathbf{x}$, define the covariance matrix
+
+\begin{equation}
+    C_{ij}=\left\langle\left(x_i-\langle x_i\rangle\right)\left(x_j-\langle x_j\rangle\right)\right\rangle.
+\end{equation}
+
+The principal components are the eigenvectors of this matrix,
+
+\begin{equation}
+    C\mathbf{v}_{\mu}=\lambda_{\mu}\mathbf{v}_{\mu}.
+\end{equation}
+
+The eigenvectors $\mathbf{v}_{\mu}$ define new coordinate directions.
+The corresponding eigenvalues $\lambda_{\mu}$ measure the variance of the data along those directions.
+
+The first principal component is the direction along which the data vary most.
+The second is the orthogonal direction containing the next-largest variance, and so on.
+
+If only a few eigenvalues are large, a high-dimensional dataset can be represented accurately using only a few principal components.
+PCA therefore provides both a change of coordinates and a method for dimensionality reduction.
+
+
+% ============================================================
+\subsection{The eigenworm}
+% ============================================================
+
+A biological example of finding useful coordinates is the analysis of \textit{Caenorhabditis elegans} posture and locomotion.
+
+A related historical reading is Charles Darwin's \textit{The Formation of Vegetable Mould through the Action of Worms}.
+
+A quantitative study of worm posture is:
+
+\begin{quote}
+G. J. Stephens, B. Johnson-Kerner, W. Bialek, and W. S. Ryu,
+\textit{Dimensionality and Dynamics in the Behavior of C. elegans},
+PLoS Computational Biology \textbf{4}, e1000028 (2008).
+\end{quote}
+
+The goal is to determine whether the apparently complicated set of worm postures can be represented using only a few collective coordinates.
+
+A simplified image-analysis and PCA pipeline is:
+
+\begin{enumerate}[start=0]
+    \item Parse the image data.
+    \item Segment the worm from the image background.
+    \item Skeletonize the worm to determine its centerline.
+    \item Fit or sample a smooth contour along the centerline.
+    \item Compute the tangent angle along the body for every recorded time.
+    \item Arrange the tangent-angle data as a function of body position and time.
+    \item Compute the covariance matrix of the angular fluctuations.
+    \item Perform principal component analysis.
+    \item Decompose each observed posture into the resulting eigenmodes.
+\end{enumerate}
+
+Let $\theta(s,t)$ denote the tangent angle at position $s$ along the worm body at time $t$.
+After removing the overall orientation of the worm, a posture can be represented by the set of angles along its body.
+
+The covariance between two body positions $s$ and $s'$ is
+
+\begin{equation}
+    C(s,s')=\left\langle\left[\theta(s)-\langle\theta(s)\rangle\right]\left[\theta(s')-\langle\theta(s')\rangle\right]\right\rangle.
+\end{equation}
+
+The eigenvectors of this covariance matrix satisfy
+
+\begin{equation}
+    \sum_{s'}C(s,s')u_{\mu}(s')=\lambda_{\mu}u_{\mu}(s).
+\end{equation}
+
+These principal components are called \emph{eigenworms}.
+
+The worm shape can then be represented approximately as
+
+\begin{equation}
+    \theta(s,t)\approx\sum_{\mu=1}^{K}a_{\mu}(t)u_{\mu}(s).
+\end{equation}
+
+Stephens et al.\ found that only four eigenworms account for more than $95\%$ of the observed variance in worm shapes.
+
+Thus an object initially represented using roughly one hundred local angular coordinates can be represented, to good approximation, by only four mode amplitudes,
+
+\begin{equation}
+    \mathbf{a}(t)=
+    \begin{pmatrix}
+        a_1(t) \\
+        a_2(t) \\
+        a_3(t) \\
+        a_4(t)
+    \end{pmatrix}.
+\end{equation}
+
+The important result is not merely data compression.
+The new coordinates provide a compact description of the behavior and dynamics of the animal.
+
+
+% ------------------------------------------------------------
+\subsubsection{Geometric phase and locomotion}
+% ------------------------------------------------------------
+
+A related example is:
+
+\begin{quote}
+J. M. Rieser et al.,
+\textit{Geometric phase predicts locomotion performance in undulating living systems across scales},
+PNAS \textbf{121}, e2320517121 (2024).
+\end{quote}
+
+Periodic locomotion can be represented as a closed trajectory through a low-dimensional space of body shapes.
+The coordinates of this space describe how much of different shape modes are present at a given time.
+
+As the animal cycles through a sequence of shapes, it traces a loop through shape space.
+The geometry of this loop can be related to the net displacement accumulated during one locomotor cycle.
+
+Thus an appropriate low-dimensional representation can expose a direct relationship between body-shape dynamics and locomotion.
+
+
+% ============================================================
+\subsection{Shannon entropy}
+% ============================================================
+
+Shannon entropy provides a measure of the uncertainty associated with a probability distribution.
+
+For a discrete probability distribution
+
+\begin{equation}
+    \{p_1,p_2,\ldots,p_n\},
+\end{equation}
+
+the Shannon entropy is
+
+\begin{equation}
+    \boxed{S(\{p_i\})=-\sum_{i=1}^{n}p_i\ln p_i.}
+\end{equation}
+
+A distribution concentrated entirely in one state has no uncertainty and therefore zero entropy.
+A broader distribution represents greater uncertainty.
+
+When no constraints other than normalization are imposed, entropy is maximized by assigning equal probability to every available state.
+This motivates the maximum-entropy principle: choose the probability distribution that satisfies the known constraints while otherwise introducing as little additional structure as possible.
+
+In this sense, the maximum-entropy distribution is maximally non-committal about information that has not been specified.
+
+
+% ------------------------------------------------------------
+\subsubsection{Maximum entropy with constraints}
+% ------------------------------------------------------------
+
+Suppose that the states are labeled
+
+\begin{equation}
+    i=1,\ldots,n.
+\end{equation}
+
+The probabilities must satisfy the normalization constraint
+
+\begin{equation}
+    \sum_{i=1}^{n}p_i=1.
+\end{equation}
+
+As an example, suppose that the mean state is also constrained to be
+
+\begin{equation}
+    \sum_{i=1}^{n}ip_i=4.5.
+\end{equation}
+
+We want to find the distribution $\{p_i\}$ that maximizes
+
+\begin{equation}
+    S=-\sum_{i=1}^{n}p_i\ln p_i
+\end{equation}
+
+subject to these constraints.
+
+Introduce Lagrange multipliers $\alpha$ and $\beta$ and define
+
+\begin{equation}
+    \mathcal{L}=-\sum_{i=1}^{n}p_i\ln p_i-\alpha\left(\sum_{i=1}^{n}p_i-1\right)-\beta\left(\sum_{i=1}^{n}ip_i-4.5\right).
+\end{equation}
+
+The stationary condition for every $p_i$ is
+
+\begin{equation}
+    \frac{\partial\mathcal{L}}{\partial p_i}=0.
+\end{equation}
+
+This gives
+
+\begin{equation}
+    -\ln p_i-1-\alpha-\beta i=0.
+\end{equation}
+
+Therefore,
+
+\begin{equation}
+    p_i=e^{-1-\alpha-\beta i}.
+\end{equation}
+
+Equivalently,
+
+\begin{equation}
+    p_i\propto e^{-\beta i}.
+\end{equation}
+
+The remaining constants are determined by the normalization and mean-value constraints.
+
+\paragraph{Exercise}
+
+Determine the Lagrange multipliers and hence the maximum-entropy distribution for a specified set of allowed states subject to
+
+\begin{equation}
+    \sum_i p_i=1
+\end{equation}
+
+and
+
+\begin{equation}
+    \sum_i ip_i=4.5.
+\end{equation}
+
+
+% ============================================================
+\subsection{Outlook: physical approaches to biology}
+% ============================================================
+
+Physical approaches to biology are not defined only by the use of equations or quantitative measurements.
+They also provide particular ways of deciding what constitutes an explanation or an understanding of a biological system.
+
+Themes emphasized in the course include:
+
+\begin{itemize}
+    \item providing alternative definitions of what it means to understand a phenomenon;
+    \item exposing hidden sameness between apparently unrelated biological systems;
+    \item providing a different perspective on what is meant by a mechanism;
+    \item allowing null hypotheses to be formulated explicitly and quantitatively;
+    \item forcing us to be clear about what is known and what is not known, in the spirit of ``militant ignorance'';
+    \item emphasizing conceptual knowledge rather than the accumulation of isolated facts.
+\end{itemize}
+
+A recurring theme throughout the course is that the choice of representation, model, or null hypothesis is itself part of the scientific reasoning.
+The aim is not merely to calculate a quantity, but to identify a description in which the essential structure of the biological problem becomes visible.

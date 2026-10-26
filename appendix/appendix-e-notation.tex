@@ -1,0 +1,90 @@
+\clearpage
+\section{Notation summary}
+\label{app:notation}
+% EDITORIAL ADDITION: navigation or conceptual bridge
+This table collects the recurring constants and notation conventions used throughout the notes.
+Variables specific to a single biological model are defined where that model is introduced.
+
+% ====================
+
+{\small
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{@{}p{0.23\textwidth}p{0.73\textwidth}@{}}
+\hline
+Notation & Use in these notes \\
+\hline
+\endfirsthead
+
+\hline
+Notation & Use in these notes \\
+\hline
+\endhead
+
+\hline
+\endfoot
+
+$\Delta t$, $\Delta x$ & Finite increments in time or position. \\
+
+$\mathrm{d}/\mathrm{d}t$ & Ordinary derivative with respect to time, used when the quantity depends on a single independent variable. \\
+
+$\partial/\partial t$, $\partial/\partial x$ & Partial derivatives, used when a quantity depends on several variables. \\
+
+$\mathcal{O}(\epsilon^n)$ & Terms of order $\epsilon^n$ or smaller that are omitted from an approximation. \\
+
+$\approx$, $\sim$, $\propto$ & Approximately equal to, scales as, and proportional to, respectively. \\
+
+$\langle X\rangle$ & Mean or expectation value of the quantity $X$. \\
+
+$\operatorname{Var}(X) = \langle X^2\rangle-\langle X\rangle^2$ & Variance of $X$. \\
+
+% $ & Variance of $X$, written explicitly as a named operation. \\
+
+$\operatorname{Cov}(X,Y)$ & Covariance of $X$ and $Y$. \\
+
+$\mu$, $\sigma$, $\sigma^2$ & Mean, standard deviation, and variance of a probability distribution. \\
+
+$p_i$ & Probability assigned to the discrete state $i$. \\
+
+$p(x)$ & Probability density for a continuous variable $x$. \\
+
+$\sum_i p_i=1$, $\int p(x)\,\dd x=1$ & Normalization conditions for discrete and continuous probability distributions. \\
+
+$[X]$ & Concentration of the molecular species $X$. \\
+
+$\mathrm{ss}$ & Subscript denoting a steady-state value. \\
+
+$\mathrm{tot}$ & Subscript denoting the total amount or concentration of a conserved quantity. \\
+
+$\mathrm{on}$, $\mathrm{off}$ & Subscripts denoting association and dissociation processes or the corresponding states and times. \\
+
+% $\lambda$ & A rate, the mean of a Poisson distribution, or an eigenvalue, depending on context. \\
+
+$\mathbf{x}$, $\mathbf{p}$ & Vectors; bold lowercase symbols denote collections of components. \\
+
+$A$, $C$, $X$ & Matrices or linear operators, as specified in the surrounding text. \\
+
+% $A^{\mathsf T}$, $A^{-1}$ & Transpose and inverse of the matrix $A$. \\
+
+$\hat{\boldsymbol{\theta}}$ & Estimated value of a parameter vector. \\
+
+$\delta\mathbf{x}$ & Deviation of a vector from its mean, $\delta\mathbf{x}=\mathbf{x}-\langle\mathbf{x}\rangle$. \\
+
+$\delta(x-x_0)$ & Dirac delta distribution concentrated at $x=x_0$. \\
+
+$D$ & Diffusion constant. \\
+
+$J$ & Flux: the amount of material crossing a unit area per unit time. \\
+
+$k_B = 1.38\times10^{-23}\,\mathrm{J\,K^{-1}}$ & Boltzmann constant. \\
+
+$T$ & Absolute temperature. \\
+
+$\beta=1/(k_BT)$ & Inverse thermal energy. \\
+% , unless introduced as a Lagrange multiplier. \\
+
+$E$, $S$, $F$ & Energy, entropy, and free energy. \\
+
+$Z$ & Partition function: the sum of the statistical weights of all allowed states. \\
+
+\end{longtable}
+}

@@ -1,0 +1,412 @@
+\clearpage
+\section{Modeling biological processes: variables, rates, and time evolution}
+\label{sec:rates}
+% EDITORIAL ADDITION: navigation or conceptual bridge
+A model starts with a question and a choice of variables.
+For growth, a single mass variable may suffice; for binding, concentrations of free and bound molecules are useful.
+The aim is to choose a description that retains the processes needed to answer the question.
+The broader problem of finding useful representations is revisited in section~\ref{sec:representations}.
+% Source: day2.tex:15; unit d2.1.0
+\subsection{The theory of the mean}
+\label{sec:mean}
+
+
+% ============================================================
+
+A useful way of constructing a dynamical model is to keep track of the mean value of one or more variables of interest.
+
+The basic protocol is:
+
+\begin{enumerate}
+    \item Identify the variables of interest.
+    \item Enumerate all the ways in which those variables can increase or decrease, and assign rates to those processes.
+    \item Write an update rule describing the change during a small time interval $\Delta t$.
+    \item Take the continuum limit and integrate the resulting differential equation to obtain the time evolution.
+\end{enumerate}
+
+
+% ------------------------------------------------------------
+
+% Source: day1.tex:69; unit d1.3
+\subsection{Autocatalysis and exponential cellular growth}
+\label{sec:growth}
+
+
+% ====================
+
+A useful coarse-grained picture of the cell is as a system whose dry mass is dominated by proteins and whose growth is therefore closely related to protein production \cite{milo2013total}.
+In \textit{E.~coli}, measured protein-to-mRNA abundance ratios span approximately $10^2$ - $10^4$ across genes, making
+\[
+    \frac{\text{number of protein molecules}}{\text{number of mRNA molecules}} \sim 10^3
+\]
+a useful order-of-magnitude scale \cite{taniguchi2010quantifying}.
+
+Ribosomes synthesize proteins, including the ribosomal proteins required to construct new ribosomes.
+Thus the translational machinery participates in its own production.
+At a coarse-grained level, this creates an \emph{autocatalytic} process: the machinery responsible for growth produces more of the machinery responsible for growth \cite{roy2021unifying}.
+This provides an intuitive route to exponential cellular growth.
+
+% ====================
+\subsubsection*{Simple growth law}
+% ====================
+
+Let $M(t)$ denote the cell mass at time $t$.
+
+Assume that the rate at which new mass is produced is proportional to the mass already present. 
+Over a short time interval $\Dt$, 
+\[
+    M(t+\Dt) = M(t) + kM(t)\Dt,
+\] 
+where $k$ is the fractional growth rate. 
+Rearranging, 
+\[
+    \frac{M(t+\Dt)-M(t)}{\Dt} = kM(t).
+\] 
+Taking the limit $\Dt\rightarrow 0$ gives 
+\[
+    \frac{\dd M}{\dd t} = kM.
+\] 
+The solution is 
+\[
+    M(t) = M(0)e^{kt}.
+\] 
+Thus a constant fractional growth rate produces exponential growth.
+
+This model assumes that
+
+\begin{itemize}
+    \item the cell can be described by a single coarse-grained variable $M(t)$;
+    \item the amount of active protein-production machinery is
+    approximately proportional to cell mass;
+    \item the protein-production rate per unit mass is approximately
+    constant;
+    \item nutrients and other resources are not limiting over the time interval considered;
+    \item degradation and other losses are either negligible or already incorporated into the effective rate constant $k$;
+    \item fluctuations in individual molecular events can be neglected, so that a deterministic continuum description is appropriate.
+\end{itemize}
+
+
+% ====================
+
+% Source: day1.tex:132; unit d1.4
+\subsection{Biological turnover}
+\label{sec:turnover}
+
+
+% ====================
+
+Biological systems continually replace components such as red blood cells, photoreceptor components, proteins, RNA molecules, and cells in renewing tissues \cite{reddien2024purpose}.
+Human red blood cells provide a classic example: isotope-labeling experiments established that they have a finite lifespan and are continuously replaced \cite{shemin1946life}.
+A simple birth-death model illustrates how turnover can produce a steady state even while individual components are continuously produced and destroyed.
+The same general modeling framework applies: identify the states of interest, enumerate the processes that move material between those states, assign rates, and construct the corresponding dynamical equations.
+
+% Source: day2.tex:265; unit d2.2
+\subsection{Example: phytoplankton resource competition}
+\label{sec:plankton}
+A biological example of constructing dynamical rules from rates is the uptake of limiting resources by phytoplankton.
+David Tilman studied competition between freshwater phytoplankton species under different supplies of limiting resources.
+The experiments compared predictions from quantitative resource-competition models with the observed abundances of competing algal species \cite{tilman1977resource}.
+
+% Source: day1.tex:147; unit d1.5
+\subsection{Case study: mRNA production, degradation, and steady state}
+\label{sec:mrna-mean}
+
+
+% ====================
+
+Let $m(t)$ denote the mean number of mRNA molecules per cell at time $t$.
+
+Suppose that
+\begin{itemize}
+    \item mRNA molecules are produced at a constant rate $r$;
+    \item each existing mRNA has a constant probability per unit time $\gamma$ of being degraded.
+\end{itemize}
+
+For example, consider a production rate
+\[
+    r \sim 1 \text{ mRNA per few minutes},
+\]
+while the characteristic mRNA lifetime is
+\[
+    \tau = \frac{1}{\gamma}.
+\]
+Over a small time interval $\Dt$,
+\begin{align*}
+    m(t+\Dt) &= m(t) + \text{mRNAs produced} - \text{mRNAs degraded}
+    \\
+    &= m(t) + r\Dt - \gamma m(t)\Dt.
+\end{align*}
+Therefore,
+\[
+    \frac{m(t+\Dt)-m(t)}{\Dt} = r-\gamma m(t).
+\]
+Taking $\Dt \rightarrow 0$,
+\begin{equation}
+    \frac{\dd m}{\dd t} = r-\gamma m.
+    \label{eq:mrna-mean}
+\end{equation}
+Dimensional consistency determines the units of the parameters.
+The left-hand side has units of molecules per time.
+Therefore $r$ must have units of molecules per time and $\gamma$ must have units of inverse time, so that $\gamma m$ also has units of molecules per time.
+The product $\gamma t$ is dimensionless, as required when it appears in the exponential $e^{-\gamma t}$.
+
+At steady state,
+\[
+    \frac{\dd m}{\dd t}=0,
+\]
+ so
+\[
+    m_{\mathrm{ss}} = \frac{r}{\gamma}.
+\]
+
+The full solution is
+\[
+    m(t) = \frac{r}{\gamma} + \left( m(0)-\frac{r}{\gamma} \right) e^{-\gamma t}.
+\]
+Thus the system approaches its steady-state mRNA number on the characteristic timescale
+\[
+    \tau = \frac{1}{\gamma}.
+\]
+
+% ====================
+The deterministic model assumes that
+
+\begin{itemize}
+    \item transcription occurs at a constant average rate $r$;
+    \item degradation is first-order: each mRNA has the same constant degradation probability per unit time;
+    \item mRNA molecules act independently;
+    \item $r$ and $\gamma$ do not vary with time;
+    \item discrete molecular fluctuations are ignored.
+\end{itemize}
+
+At the level of individual molecules, transcription and degradation are stochastic processes.
+Single-cell measurements directly reveal fluctuations in mRNA copy number and burst-like transcription \cite{golding2005real,taniguchi2010quantifying}.
+Eqn.~\eqref{eq:mrna-mean} describes the mean behavior.
+
+
+
+% ============================================================
+
+% Source: day2.tex:31; unit d2.1.1
+\subsection{Case study: ligand-receptor binding}
+\label{sec:binding-rates}
+
+% ------------------------------------------------------------
+
+Consider a ligand $L$ that can bind reversibly to a receptor $R$ to form a ligand-receptor complex $LR$.
+
+The variables of interest are therefore the concentrations
+
+\[
+    [R], \qquad [L], \qquad [LR].
+\]
+
+Here $[R]$ denotes the concentration of free receptors, $[L]$ the concentration of free ligands, and $[LR]$ the concentration of bound ligand-receptor complexes.
+% 
+% 
+% ------------------------------------------------------------
+\paragraph{Step 1: identify the variables}
+% ------------------------------------------------------------
+A schematic representation of the three states is
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[
+        ligand/.style={circle, draw, minimum size=0.42cm, inner sep=0pt},
+        % reaction/.style={Latex-Latex, thick}
+    ]
+        \draw[rounded corners=2pt] (-0.55,-0.35) -- (0.55,-0.35) -- (0.55,0.35) -- (0.23,0.35) .. controls (0.18,0.12) and (-0.18,0.12) .. (-0.23,0.35) -- (-0.55,0.35) -- cycle;
+        \node at (0,-0.10) {$R$};
+        \node at (1.0,0) {$+$};
+        \node[ligand] (L) at (2.0,0) {\scriptsize $L$};
+
+        \draw[-Latex, thick] (2.8,0.10) -- (5.2,0.10);
+        \draw[-Latex, thick] (5.2,-0.10) -- (2.8,-0.10);
+        
+        \node[above] at (4.0,0.10) {$k_{\mathrm{on}}$};
+        \node[below] at (4.0,-0.10) {$k_{\mathrm{off}}$};
+
+        \begin{scope}[shift={(6.2,0)}]
+            \draw[rounded corners=2pt] (-0.55,-0.35) -- (0.55,-0.35) -- (0.55,0.35) -- (0.23,0.35) .. controls (0.18,0.12) and (-0.18,0.12) .. (-0.23,0.35) -- (-0.55,0.35) -- cycle;
+            \node at (0,-0.10) {$R$};
+            \node[ligand] at (0,0.36) {\scriptsize $L$};
+        \end{scope}
+        \node at (7.1,0) {$LR$};
+    \end{tikzpicture}
+    \caption{Reversible binding of a ligand $L$ to a receptor $R$ to form the complex $LR$.
+    The same ligand and receptor symbols are used in the unbound and bound states.}
+\end{figure}
+% 
+% 
+% ------------------------------------------------------------
+\paragraph{Step 2: enumerate the processes and their rates}
+% ------------------------------------------------------------
+The reaction is
+\[
+    R + L \xrightleftharpoons[k_{\mathrm{off}}]{k_{\mathrm{on}}} LR.
+\]
+The forward reaction is ligand binding.
+According to the law of mass action, its rate is proportional to both the free ligand concentration and the free receptor concentration,
+\[
+    \text{binding rate} = k_{\mathrm{on}}[L][R].
+\]
+
+The reverse reaction is ligand unbinding.
+Its rate is proportional to the concentration of bound complexes,
+\[
+    \text{unbinding rate} = k_{\mathrm{off}}[LR].
+\]
+The association rate constant $k_{\mathrm{on}}$ has units of concentration$^{-1}$ time$^{-1}$.
+The dissociation rate constant $k_{\mathrm{off}}$ has units of time$^{-1}$.
+% 
+% 
+% ------------------------------------------------------------
+\paragraph{Step 3: write the update rule}
+% ------------------------------------------------------------
+During a short time interval $\Delta t$, the concentration of bound complexes changes according to
+\[
+    [LR](t+\Delta t) = [LR](t) + k_{\mathrm{on}}\Delta t[L][R] - k_{\mathrm{off}}\Delta t[LR].
+\]
+The first additional term represents newly formed complexes.
+The second represents complexes lost through dissociation.
+Subtracting $[LR](t)$ from both sides and dividing by $\Delta t$ gives
+\[
+    \frac{[LR](t+\Delta t)-[LR](t)}{\Delta t} = k_{\mathrm{on}}[L][R] - k_{\mathrm{off}}[LR].
+\]
+Taking the limit $\Delta t\rightarrow0$ gives
+\[
+    \boxed{\frac{\dd[LR]}{\dd t} = k_{\mathrm{on}}[L][R] - k_{\mathrm{off}}[LR].}
+\]
+% 
+% 
+% ------------------------------------------------------------
+\paragraph{Steady state}
+% ------------------------------------------------------------
+At steady state, the mean concentration of bound complexes is no longer changing,
+\[
+    \frac{\dd[LR]}{\dd t} = 0.
+\]
+Therefore,
+\[
+    k_{\mathrm{on}}[L][R] - k_{\mathrm{off}}[LR] = 0.
+\]
+Hence
+\[
+    k_{\mathrm{on}}[L][R] = k_{\mathrm{off}}[LR].
+\]
+Rearranging,
+\[
+    \frac{[L][R]}{[LR]} = \frac{k_{\mathrm{off}}}{k_{\mathrm{on}}}.
+\]
+We define the dissociation constant
+\[
+    \boxed{K_d = \frac{k_{\mathrm{off}}}{k_{\mathrm{on}}}.}
+\]
+Therefore,
+\[
+    K_d = \frac{[L][R]}{[LR]}.
+\]
+Equivalently,
+\[
+    \frac{[LR]}{[R]} = \frac{[L]}{K_d}.
+\]
+% 
+% 
+% ------------------------------------------------------------
+\paragraph{Probability that a receptor is bound}
+% ------------------------------------------------------------
+The total receptor concentration is the sum of free and bound receptors,
+\[
+    [R]_{\mathrm{tot}} = [R] + [LR].
+\]
+The fraction of receptors that are bound is therefore
+\[
+    P_{\mathrm{bound}} = \frac{[LR]}{[R]+[LR]}.
+\]
+Using
+\[
+    \frac{[LR]}{[R]} = \frac{[L]}{K_d},
+\]
+we obtain
+\[
+    P_{\mathrm{bound}} = \frac{[L]/K_d}{1+[L]/K_d}.
+\]
+Thus
+\begin{equation}
+    \boxed{P_{\mathrm{bound}}([L]) = \frac{[L]}{K_d+[L]}.}
+    \label{eq:binding-occupancy}
+\end{equation}
+This expression has several useful limits.
+
+When there is no ligand,
+\[
+    [L]=0 \quad \Rightarrow \quad P_{\mathrm{bound}}=0.
+\]
+When the ligand concentration is very large compared with $K_d$,
+\[
+    [L]\gg K_d \quad \Rightarrow \quad P_{\mathrm{bound}}\rightarrow1.
+\]
+When
+\[
+    [L]=K_d,
+\]
+we have
+\[
+    P_{\mathrm{bound}} = \frac{1}{2}.
+\]
+Thus $K_d$ is the ligand concentration at which half of the receptors are occupied in this binding model.
+A smaller $K_d$ corresponds to stronger binding, since less ligand is required to reach half occupancy.
+% 
+% 
+% ------------------------------------------------------------
+\paragraph{Step 4: time evolution}
+% ------------------------------------------------------------
+To solve explicitly for the time evolution, suppose that the free ligand concentration $[L]$ remains approximately constant.
+The total receptor concentration is conserved,
+\[
+    [R]_{\mathrm{tot}} = [R]+[LR].
+\]
+Therefore,
+\[
+    [R] = [R]_{\mathrm{tot}}-[LR].
+\]
+Substituting this into the dynamical equation gives
+\[
+    \frac{\dd[LR]}{\dd t} = k_{\mathrm{on}}[L]\left([R]_{\mathrm{tot}}-[LR]\right)-k_{\mathrm{off}}[LR].
+\]
+Collecting terms gives
+\[
+    \frac{\dd[LR]}{\dd t} = k_{\mathrm{on}}[L][R]_{\mathrm{tot}}-\left(k_{\mathrm{on}}[L]+k_{\mathrm{off}}\right)[LR].
+\]
+The equilibrium concentration is
+\[
+    [LR]_{\mathrm{eq}} = [R]_{\mathrm{tot}}\frac{[L]}{K_d+[L]}.
+\]
+The full time-dependent solution is
+\[
+    [LR](t) = [LR]_{\mathrm{eq}} + \left([LR](0)-[LR]_{\mathrm{eq}}\right)e^{-\left(k_{\mathrm{on}}[L]+k_{\mathrm{off}}\right)t}.
+\]
+The system therefore relaxes exponentially toward equilibrium with characteristic timescale
+\[
+    \tau = \frac{1}{k_{\mathrm{on}}[L]+k_{\mathrm{off}}}.
+\]
+% 
+% 
+% ------------------------------------------------------------
+The model assumes that:
+\begin{itemize}
+    \item the system is well mixed, so spatial variation in ligand and receptor concentrations can be ignored;
+    \item each receptor has a single independent ligand-binding site;
+    \item binding follows the law of mass action;
+    \item the rate constants $k_{\mathrm{on}}$ and $k_{\mathrm{off}}$ are constant;
+    \item receptors and ligands are chemically identical within their respective populations;
+    \item there is no cooperativity between receptors;
+    \item there are no additional receptor states or competing ligands;
+    \item for the explicit time-dependent solution above, the free ligand concentration $[L]$ is treated as constant.
+\end{itemize}
+
+
+% ============================================================
+
+% EDITORIAL ADDITION: navigation or conceptual bridge
+The same steady occupancy will be recovered by counting microscopic states in section~\ref{sec:binding-counting}.
+The rate description additionally gives the relaxation time; an equilibrium occupancy alone does not determine both rate constants.

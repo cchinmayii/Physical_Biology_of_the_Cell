@@ -1,0 +1,585 @@
+\clearpage
+\section{Random walks and diffusion}
+\label{sec:diffusion}
+% EDITORIAL ADDITION: navigation or conceptual bridge
+Spatial probability flow uses the same incoming-minus-outgoing bookkeeping as the mRNA histogram.
+A random walk makes the microscopic steps explicit; a lattice master equation evolves site probabilities; a continuum equation describes a smooth density.
+% Source: day3.tex:604; unit d3.6.0
+\subsection{Diffusion as a dynamical null hypothesis}
+\label{sec:diff-null}
+
+
+% ------------------------------------------------------------
+
+Diffusion provides a useful dynamical null hypothesis for many biological processes.
+If there is no evidence for directed motion, active transport, interactions, external forces, or spatially varying dynamics, random motion provides the simplest starting model.
+
+The same diffusive dynamics can be described at several different levels:
+
+\begin{enumerate}
+    \item diffusion by coin flips or random walks;
+    \item diffusion by continuum theory;
+    \item diffusion by a master equation.
+\end{enumerate}
+These are not fundamentally different phenomena.
+They are different mathematical descriptions of the same underlying stochastic motion.
+
+
+% ------------------------------------------------------------
+
+% Source: day3.tex:622; unit d3.6.1
+\subsection{Coin flips, spreading, and mean-square displacement}
+\label{sec:coin}
+
+% ------------------------------------------------------------
+
+The most microscopic picture is a random walker making independent leftward or rightward jumps.
+In a discrete-time coin-flip model, the walker moves once during every step.
+In the continuous-time hopping model used below, jumps in either direction occur at rate $k$, so during a sufficiently short interval $\Delta t$ the walker may jump left, jump right, or remain at its current position.
+
+On a one-dimensional lattice with spacing $a$, each step changes the position by
+\[
+    x \rightarrow x+a \qquad \text{or} \qquad x \rightarrow x-a.
+\]
+For an unbiased walk, the two directions are equally likely.
+Repeated independent random steps generate a probability distribution that spreads out with time.
+A characteristic signature of normal diffusion is
+\[
+    \left\langle x^2(t)\right\rangle\propto t.
+\]
+In one dimension,
+\[
+    \left\langle x^2(t)\right\rangle=2Dt,
+\]
+where $D$ is the diffusion constant \cite{einstein1905molekularkinetischen}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        scale=0.82,
+        transform shape,
+        line cap=round,
+        line join=round
+    ]
+        \begin{scope}[x=0.72cm,y=0.48cm]
+            \draw[-Latex] (0,-3.4) -- (0,3.7) node[above] {$x/a$};
+            \draw[-Latex] (-0.2,0) -- (6.7,0) node[right] {step $n$};
+    
+            \foreach \n in {1,...,6}
+                \draw[gray!35] (\n,-3.1) -- (\n,3.1);
+    
+            \draw[thick,blue!70!black]
+                (0,0) -- (1,1) -- (2,0) -- (3,1) -- (4,2) -- (5,1) -- (6,2);
+    
+            \draw[thick,orange!85!black]
+                (0,0) -- (1,-1) -- (2,-2) -- (3,-1) -- (4,-2) -- (5,-3) -- (6,-2);
+    
+            \draw[thick,green!50!black]
+                (0,0) -- (1,1) -- (2,2) -- (3,1) -- (4,0) -- (5,1) -- (6,0);
+    
+            \node[align=center] at (3,-4.15)
+                {individual random-walk trajectories};
+        \end{scope}
+    
+        \begin{scope}[
+            shift={(8.0,-1.15)},
+            x=0.9cm,
+            y=0.75cm
+        ]
+            \draw[-Latex] (0,0) -- (5.5,0) node[right] {$t$};
+            \draw[-Latex] (0,0) -- (0,4.0) node[above] {$\langle x^2\rangle$};
+    
+            \draw[thick,blue!70!black]
+                (0,0) -- (5,3.4)
+                node[pos=0.70,below=10pt]
+                {$\langle x^2\rangle=2Dt$};
+    
+            \node[align=center] at (2.6,-1.15)
+                {ensemble spreading};
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Independent left--right choices produce different trajectories, but the ensemble mean-square displacement grows linearly with time.}
+    \label{fig:coin-msd}
+\end{figure}
+
+
+% ------------------------------------------------------------
+
+% Source: day3.tex:8; unit d3.0.0
+\subsection{A one-dimensional symmetric random walk}
+\label{sec:random-walk}
+
+
+% ====================
+
+Consider particles performing a random walk on a one-dimensional lattice.
+Define
+\begin{itemize}
+    \item $x$: position,
+    \item $a$: lattice spacing, i.e.\ the distance traveled in one jump,
+    \item $t$: time,
+    \item $\Dt$: duration of one small time step,
+    \item $k$: hopping rate in each direction,
+    \item $P(x,t)$: probability of finding the particle at position $x$ at time $t$.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex]
+        \node[draw,circle,fill=blue!12,minimum size=0.72cm] (start) at (0,2.0) {};
+        \node[right=0.18cm of start] {position $x$ at time $t$};
+        \foreach \xx/\lab in {-3/{x-a},0/x,3/{x+a}} {
+            \draw[gray!65,thick] (\xx-0.9,0) -- (\xx+0.9,0);
+            \node[draw,circle,fill=blue!12,minimum size=0.72cm] (p\xx) at (\xx,0) {};
+            \node[below=0.18cm of p\xx] {$\lab$};
+        }
+        \draw[->,thick] (start) -- node[above left,pos=0.55] {$k\Delta t$} (p-3);
+        \draw[->,thick] (start) -- node[left,pos=0.58] {$1-2k\Delta t$} (p0);
+        \draw[->,thick] (start) -- node[above right,pos=0.55] {$k\Delta t$} (p3);
+        \draw[<->] (-3,-1.0) -- node[below] {$a$} (0,-1.0);
+        \draw[<->] (0,-1.0) -- node[below] {$a$} (3,-1.0);
+        \node at (-4.7,0) {$t+\Delta t:$};
+    \end{tikzpicture}
+    \caption{In one time step $\Delta t$, a walker at $x$ moves by one lattice spacing $a$ to either neighbor with probability $k\Delta t$, or remains at $x$ with probability $1-2k\Delta t$.}
+    \label{fig:one-dimensional-walk}
+\end{figure}
+
+During a short time interval $\Dt$, the particle can
+\begin{itemize}
+    \item jump from $x-a$ to $x$,
+    \item jump from $x+a$ to $x$,
+    \item jump away from $x$ to either neighboring site,
+    \item or remain at $x$.
+\end{itemize}
+
+The update rule is
+\[
+    \boxed{ P(x,t+\Dt) = P(x,t) + k\Dt P(x-a,t) + k\Dt P(x+a,t) - 2k\Dt P(x,t) }
+\]
+or equivalently,
+\[
+    P(x,t+\Dt) = P(x,t) + k\Dt \left[ P(x-a,t) + P(x+a,t) - 2P(x,t) \right].
+\]
+The quantity in square brackets is the discrete analogue of a second spatial derivative.
+% 
+% 
+The model assumes:
+\begin{itemize}
+    \item motion occurs in one spatial dimension;
+    \item space is homogeneous: the jump rate $k$ is independent of $x$;
+    \item the walk is unbiased: jumps to the left and right have the same rate;
+    \item only nearest-neighbor jumps of length $a$ are allowed;
+    \item successive jumps are independent;
+    \item the dynamics are Markovian: the next step depends only on the current state;
+    \item $\Dt$ is sufficiently small that $2k\Dt\leq1$, so the jump probabilities remain valid;
+    \item when Fourier modes $q_n=2\pi n/L$ are used, the system is taken to be periodic with period $L$.
+\end{itemize}
+% 
+% 
+% ====================
+\medskip
+% \\
+
+% Source: day3.tex:818; unit d3.6.5.0
+\subsection{The lattice master equation}
+\label{sec:lattice-master}
+
+% ------------------------------------------------------------
+
+The random-walk update rule can also be viewed as a master equation for the probability of occupying each lattice site.
+
+Let $P_i(t)$ denote the probability of occupying lattice site $i$.
+If particles hop from each site to either nearest neighbor with rate $k$, probability flows into site $i$ from sites $i-1$ and $i+1$ and flows out of site $i$ toward both neighbors.
+The continuous-time master equation is therefore
+% 
+\[
+    \boxed{\frac{\dd P_i}{\dd t} = kP_{i-1} + kP_{i+1} - 2kP_i.}
+\]
+% 
+The first two terms are probability flowing into site $i$.
+The final term is probability flowing out of site $i$.
+Writing $x_i=ia$, we can identify
+% 
+\[
+    P_{i-1}(t)=P(x-a,t), \qquad P_i(t)=P(x,t), \qquad P_{i+1}(t)=P(x+a,t).
+\]
+% 
+The master equation therefore becomes
+% 
+\[
+    \frac{\partial P}{\partial t} = k\left[P(x-a,t)+P(x+a,t)-2P(x,t)\right].
+\]
+% 
+Taylor-expanding in space once again gives
+% 
+\[
+    \frac{\partial P}{\partial t} = ka^2\frac{\partial^2P}{\partial x^2} + \mathcal{O}(a^4).
+\]
+% 
+Thus, in the continuum limit,
+% 
+\[
+    \boxed{\frac{\partial P}{\partial t} = D\frac{\partial^2P}{\partial x^2}.}
+\]
+% 
+The coin-flip picture, master-equation picture, and continuum diffusion equation are therefore three descriptions of the same process at different levels of resolution.
+% 
+% 
+% ------------------------------------------------------------
+
+% Source: day3.tex:318; unit d3.1
+\subsection{From the discrete update to the continuum equation}
+\label{sec:continuum}
+
+
+% ====================
+
+The same result can be obtained by taking the continuum limit of the random-walk update rule.
+
+Start from
+% 
+\[
+    \frac{P(x,t+\Dt)-P(x,t)}{\Dt} = k \left[ P(x-a,t) + P(x+a,t) - 2P(x,t) \right].
+\]
+% 
+Taylor-expand the two spatially shifted terms:
+% 
+\begin{align*}
+    P(x+a,t) &= P(x,t) + a\frac{\partial P}{\partial x} + \frac{a^2}{2} \frac{\partial^2P}{\partial x^2} + \mathcal{O}(a^3),
+    \\
+    P(x-a,t) &= P(x,t) - a\frac{\partial P}{\partial x} + \frac{a^2}{2} \frac{\partial^2P}{\partial x^2} + \mathcal{O}(a^3).
+\end{align*}
+% 
+Adding them,
+% 
+\[
+    P(x+a,t) + P(x-a,t) - 2P(x,t) = a^2 \frac{\partial^2P}{\partial x^2} + \mathcal{O}(a^4).
+\]
+% 
+Therefore,
+% 
+\[
+    \frac{\partial P}{\partial t} = ka^2 \frac{\partial^2P}{\partial x^2}.
+\]
+% 
+Since
+% 
+\[
+    D = ka^2,
+\]
+% 
+we obtain the diffusion equation,
+% 
+\begin{equation}
+    \boxed{ \frac{\partial P}{\partial t} = D\frac{\partial^2P}{\partial x^2}. }
+    \label{eq:diffusion}
+\end{equation}
+
+
+% ====================
+
+% EDITORIAL ADDITION: navigation or conceptual bridge
+The expanded derivation, the symmetry argument, and the continuum-limit assumptions are retained in appendix~\ref{deriv:continuum}.
+When comparing discrete and continuum normalization, a site probability is approximately the density multiplied by the lattice spacing: $P_i(t)\approx aP(x_i,t)$.
+% Source: day3.tex:365; unit d3.2
+\subsection{Fick's laws}
+\label{sec:fick}
+
+
+% ====================
+
+Fick's first law states that the diffusive flux is proportional to the negative concentration gradient \cite{fick1855ueber},
+\[
+    \boxed{J=-D\frac{\partial P}{\partial x}.}
+\]
+% 
+The minus sign means that particles flow from regions of high
+concentration toward regions of low concentration.
+% 
+Conservation of particles gives the continuity equation,
+% 
+\[
+    \frac{\partial P}{\partial t} = -\frac{\partial J}{\partial x}.
+\]
+% 
+Substituting Fick's first law,
+% 
+\[
+    \frac{\partial P}{\partial t} = -\frac{\partial}{\partial x} \left( -D\frac{\partial P}{\partial x} \right).
+\]
+% 
+For constant $D$, combining the continuity equation with Fick's first law gives Eqn.~\eqref{eq:diffusion}, also known as Fick's second law.
+% 
+\[
+    \boxed{ \frac{\partial P}{\partial t} = D\frac{\partial^2P}{\partial x^2}. }
+\]
+% 
+This is Fick's second law, i.e.\ the diffusion equation.
+
+
+% ====================
+
+% Source: day3.tex:647; unit d3.6.2
+\subsection{Interpreting the continuum equation}
+\label{sec:curvature}
+
+% ------------------------------------------------------------
+
+Instead of following individual walkers, we can describe the probability density $P(x,t)$ continuously in space and time.
+
+The continuum equation for diffusion in one dimension is
+% 
+\[
+    \boxed{\frac{\partial P}{\partial t} = D\frac{\partial^2P}{\partial x^2}.}
+\]
+% 
+The left-hand side describes how the probability distribution changes with time.
+The second spatial derivative measures the local curvature of the probability distribution.
+Diffusion therefore changes $P$ wherever the distribution has spatial curvature.
+Peaks tend to flatten and valleys tend to fill in, causing the distribution to become progressively smoother.
+
+
+% ------------------------------------------------------------
+
+% Source: day3.tex:665; unit d3.6.3
+\subsubsection{The heat equation: the same mathematical structure}
+\label{sec:heat}
+
+% ------------------------------------------------------------
+
+The heat equation has exactly the same mathematical form as the diffusion equation.
+
+For temperature $T(x,t)$,
+% 
+\[
+    \boxed{\frac{\partial T}{\partial t} = \alpha\frac{\partial^2T}{\partial x^2},}
+\]
+% 
+where $\alpha$ is the thermal diffusivity.
+Thus
+% 
+\[
+    P(x,t) \longleftrightarrow T(x,t), \qquad D \longleftrightarrow \alpha.
+\]
+% 
+The mathematics is the same even though the physical quantity being transported is different.
+For particle diffusion, spatial variations in particle concentration are smoothed out.
+For heat conduction, spatial variations in temperature are smoothed out.
+The diffusion equation is therefore not specific to particles.
+It describes a much broader class of processes in which some quantity spreads locally down spatial gradients.
+
+
+% ------------------------------------------------------------
+
+% Source: day3.tex:73; unit d3.0.1
+\subsection{Why Fourier modes are useful}
+\label{sec:fourier}
+
+% ====================
+
+The update rule contains translations of the probability distribution,
+\[
+    P(x-a,t), \qquad P(x+a,t).
+\]
+Fourier modes are special because translating them does not change their shape: it only multiplies them by a number.
+The cleanest way to see this is with a complex exponential,
+\[
+    f_q(x) = e^{iqx}.
+\]
+Translation gives
+\begin{align*}
+    f_q(x+a) &= e^{iq(x+a)} = e^{iqa}f_q(x),
+    \\
+    f_q(x-a) &= e^{-iqa}f_q(x).
+\end{align*}
+Thus Fourier modes are eigenfunctions of translation.
+
+Because the random-walk update rule is built entirely from translations, we should expect Fourier modes to diagonalize the dynamics.
+Cosines and sines are simply the real and imaginary combinations of these complex exponentials:
+\[
+    e^{iqx} = \cos(qx) + i\sin(qx).
+\]
+This is the fundamental reason for trying sinusoidal modes.
+% 
+% 
+% ====================
+
+% Source: day3.tex:104; unit d3.0.2
+\subsubsection{Boundary conditions and allowed wave numbers}
+\label{sec:allowed-modes}
+
+% ====================
+
+Suppose the system has length $L$ and periodic boundary conditions,
+\[
+    P(x+L,t) = P(x,t).
+\]
+A Fourier mode must then satisfy
+\[
+    e^{iq(x+L)} = e^{iqx}.
+\]
+Therefore,
+\[
+    e^{iqL}=1,
+\]
+which requires
+\[
+    qL=2\pi n, \qquad n\in\mathbb{Z}.
+\]
+Hence the allowed wave numbers are
+\[
+    \boxed{ q_n = \frac{2\pi n}{L}. }
+\]
+% 
+% ====================
+
+% Source: day3.tex:863; unit d3.6.5.1
+\subsubsection{Independent evolution of mode amplitudes}
+\label{sec:mode-amplitudes}
+
+% ------------------------------------------------------------
+
+The diffusion equation contains a second spatial derivative,
+% 
+\[
+    \frac{\partial P}{\partial t} = D\frac{\partial^2P}{\partial x^2}.
+\]
+% 
+Fourier modes are eigenfunctions of this derivative operator because
+% 
+\[
+    \frac{\partial^2}{\partial x^2}e^{iqx} = -q^2e^{iqx}.
+\]
+% 
+Therefore the spatial derivative does not change the shape of a Fourier mode.
+It only multiplies that mode by $-q^2$.
+
+For a Fourier component
+% 
+\[
+    P_q(x,t)=A_q(t)e^{iqx},
+\]
+% 
+the diffusion PDE becomes
+% 
+\[
+    \frac{\dd A_q}{\dd t} = -Dq^2A_q.
+\]
+% 
+The solution is
+% 
+\[
+    A_q(t)=A_q(0)e^{-Dq^2t}.
+\]
+% 
+Hence
+% 
+\[
+    \boxed{P_q(x,t)=A_q(0)e^{-Dq^2t}e^{iqx}.}
+\]
+% 
+A PDE in space and time has been reduced to a simple ODE for the amplitude of each Fourier mode.
+
+Yay, Fourier is great.
+
+% ============================================================
+
+% EDITORIAL ADDITION: navigation or conceptual bridge
+For a periodic density, the general solution is
+\[
+    P(x,t)=\frac{1}{L}+\sum_{n=1}^{\infty}\left[A_n\cos(q_nx)+B_n\sin(q_nx)\right]e^{-Dq_n^2t},\qquad q_n=\frac{2\pi n}{L}.
+\]
+The coefficients specify the initial condition, and normalization fixes the constant mode to $1/L$.
+Cosines alone are sufficient for an even initial condition; a general periodic initial condition also needs sines.
+The discrete-mode calculation is in appendix~\ref{deriv:discrete-modes}, and separation of variables is in appendix~\ref{deriv:separation}.
+These are complementary ways of deriving the same long-wavelength mode decay.
+% Source: day3.tex:522; unit d3.4
+\subsection{Making a spike from cosines}
+\label{sec:spike}
+
+
+% ====================
+
+A sharply localized distribution can be constructed from many Fourier modes.
+On a periodic domain of length $L$, the periodic Dirac delta has the Fourier representation
+% 
+\[
+    \boxed{ \delta_L(x) = \frac{1}{L} \sum_{n=-\infty}^{\infty} e^{i2\pi nx/L}. }
+\]
+% 
+Combining positive and negative frequencies gives
+% 
+\[
+    \boxed{ \delta_L(x) = \frac{1}{L} \left[ 1 + 2\sum_{n=1}^{\infty} \cos\left( \frac{2\pi n x}{L} \right) \right]. }
+\]
+% 
+Keeping only the first $N$ modes gives
+% 
+\[
+    \delta_N(x) = \frac{1}{L} \left[ 1 + 2\sum_{n=1}^{N} \cos\left( \frac{2\pi n x}{L} \right) \right].
+\]
+% 
+Each cosine extends across the entire domain, so no single mode is localized near $x=0$.
+When the modes are added, however, their peaks coincide at $x=0$ while their positive and negative parts largely cancel elsewhere.
+Including more modes narrows the region in which they add constructively, producing an increasingly sharp peak around $x=0$.
+
+
+% ====================
+
+% EDITORIAL ADDITION: navigation or conceptual bridge
+The finite Fourier sum is a representation of a delta distribution and may contain negative sidelobes.
+It need not itself be a nonnegative probability density.
+The delta limit is understood in the distributional sense.
+% Source: day3.tex:553; unit d3.5
+\subsection{Diffusion of an initially sharp distribution}
+\label{sec:sharp}
+
+
+% ====================
+
+Suppose the particle begins at $x=0$, so that
+% 
+\[
+    P(x,0) = \delta_L(x).
+\]
+% 
+The Fourier representation is
+% 
+\[
+    P(x,0) = \frac{1}{L} \left[ 1 + 2\sum_{n=1}^{\infty} \cos(q_nx) \right].
+\]
+% 
+Under diffusion, every mode acquires its own decay factor,
+% 
+\[
+    e^{-Dq_n^2t}.
+\]
+% 
+Therefore,
+% 
+\[
+    \boxed{ P(x,t) = \frac{1}{L} \left[ 1 + 2\sum_{n=1}^{\infty} e^{-Dq_n^2t} \cos(q_nx) \right]. }
+\]
+
+At early times, many high-frequency modes are present and the
+distribution can be sharply peaked.
+At later times, the high-$q$ modes have decayed because their decay rates
+% 
+\[
+    D q_n^2
+\]
+% 
+are large. 
+Only the smooth, long-wavelength modes remain.
+Eventually all $n\neq0$ modes disappear and
+% 
+\[
+    P(x,t) \longrightarrow \frac{1}{L}.
+\]
+% 
+Thus diffusion can be understood as the progressive removal of
+high-frequency spatial structure.
+
+
+% ------------------------------------------------------------
+
