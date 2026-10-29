@@ -8,7 +8,7 @@ These are independently compiled course notes and are not official teaching mate
 
 ## Download
 
-**[Download the latest compiled PDF](https://github.com/cchinmayii/Physical_Biology_of_the_Cell/releases/latest)**
+**([Download the latest compiled PDF](https://github.com/cchinmayii/Physical_Biology_of_the_Cell/releases/latest/download/Physical_Biology_of_the_Cell.pdf))**
 
 The LaTeX source files are available in this repository. Updated versions of the compiled notes will be made available through GitHub Releases.
 
