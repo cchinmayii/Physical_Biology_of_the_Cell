@@ -1,4 +1,4 @@
-# Physical Biology of the Cell — Course Notes
+# Physical Biology of the Cell - Course Notes
 
 Notes compiled from the **Physical Biology of the Cell (PBoC)** course taught by **Rob Phillips and Jané Kondev** at the Max Planck Institute of Molecular Cell Biology and Genetics (MPI-CBG), Dresden, Germany, from October 5-9, 2026.
 
