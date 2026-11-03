@@ -6,9 +6,11 @@ Notes compiled from the **Physical Biology of the Cell (PBoC)** course taught by
 
 These are independently compiled course notes and are not official teaching materials.
 
-## Download
+## Read the notes online
 
-**([Download the latest compiled PDF](https://github.com/cchinmayii/Physical_Biology_of_the_Cell/releases/latest/download/Physical_Biology_of_the_Cell.pdf))**
+[**View the course notes**](https://cchinmayii.github.io/Physical_Biology_of_the_Cell/)
+
+[**Download PDF**](https://cchinmayii.github.io/Physical_Biology_of_the_Cell/notes.pdf)
 
 The LaTeX source files are available in this repository. Updated versions of the compiled notes will be made available through GitHub Releases.
 
