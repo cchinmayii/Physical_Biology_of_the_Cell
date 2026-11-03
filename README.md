@@ -4,11 +4,11 @@ Notes compiled from the **Physical Biology of the Cell (PBoC)** course taught by
 
 **[Official course website](https://www.rpgroup.caltech.edu/dresdenPBoC2026/)**
 
-These are independently compiled course notes and are not official teaching materials.
-
 [**View the course notes**](https://cchinmayii.github.io/Physical_Biology_of_the_Cell/)
 
 <!-- [**Download PDF**](https://cchinmayii.github.io/Physical_Biology_of_the_Cell/notes.pdf) -->
+
+These are independently compiled course notes and are not official teaching materials.
 
 The LaTeX source files are available in this repository. Updated versions of the compiled notes will be made available through GitHub Releases.
 
